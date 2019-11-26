@@ -10,7 +10,7 @@ import io.netty.handler.codec.http.FullHttpRequest;
  * @create: 2019/11/26
  */
 public class ContextUtil {
-    public static void setRequset(Channel channel, FullHttpRequest request) {
+    public static void setRequest(Channel channel, FullHttpRequest request) {
         channel.attr(Attributes.REQUEST).set(request);
     }
 
