@@ -1,7 +1,6 @@
 package com.pjmike.handler;
 
-import com.pjmike.execute.GatewayExecutor;
-import com.pjmike.util.ContextUtil;
+import com.pjmike.context.RequestContext;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -26,14 +25,13 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
-
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest httpRequest) throws Exception {
         Channel channel = ctx.channel();
         boolean keepAlive = HttpUtil.isKeepAlive(httpRequest);
-        ContextUtil.setRequest(channel, httpRequest);
-        ContextUtil.setKeepAlive(channel, keepAlive);
-        GatewayExecutor gatewayExecutor = GatewayExecutor.INSTANCE;
-        gatewayExecutor.execute(channel);
+        RequestContext.setRequest(channel, httpRequest);
+        RequestContext.setKeepAlive(channel, keepAlive);
+        //TODO 执行GatewayExecutor的逻辑
+        //TODO 需要将FilterWebHandler和RouteLocator注入GatewayExecutor
     }
 }
