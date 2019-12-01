@@ -1,6 +1,6 @@
-package com.pjmike.handler;
+package com.pjmike.handler.server;
 
-import com.pjmike.context.RequestContext;
+import com.pjmike.context.RequestContextUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -29,8 +29,8 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest httpRequest) throws Exception {
         Channel channel = ctx.channel();
         boolean keepAlive = HttpUtil.isKeepAlive(httpRequest);
-        RequestContext.setRequest(channel, httpRequest);
-        RequestContext.setKeepAlive(channel, keepAlive);
+        RequestContextUtil.setRequest(channel, httpRequest);
+        RequestContextUtil.setKeepAlive(channel, keepAlive);
         //TODO 执行GatewayExecutor的逻辑
         //TODO 需要将FilterWebHandler和RouteLocator注入GatewayExecutor
     }

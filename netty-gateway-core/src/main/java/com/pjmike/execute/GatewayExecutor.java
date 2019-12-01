@@ -1,6 +1,6 @@
 package com.pjmike.execute;
 
-import com.pjmike.context.RequestContext;
+import com.pjmike.context.RequestContextUtil;
 import com.pjmike.filter.handle.WebHandler;
 import com.pjmike.route.Route;
 import com.pjmike.route.RouteLocator;
@@ -29,7 +29,7 @@ public class GatewayExecutor {
             return;
         }
         //第三步: 将Route与Channel进行相应的绑定
-        RequestContext.setRoute(channel,route);
+        RequestContextUtil.setRoute(channel,route);
         //第四步：在该Channel的Route中，利用Route中的gatewayFilters进行过滤处理，需要经过pre+post
         webHandler.handle(channel);
     }

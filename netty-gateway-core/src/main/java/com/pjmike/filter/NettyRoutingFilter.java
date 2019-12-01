@@ -1,6 +1,7 @@
 package com.pjmike.filter;
 
 import com.pjmike.attribute.Attributes;
+import com.pjmike.route.Route;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpMethod;
@@ -14,11 +15,11 @@ public class NettyRoutingFilter implements GatewayFilter{
     @Override
     public void filter(Channel channel, GatewayFilterChain filterChain) {
         FullHttpRequest httpRequest = channel.attr(Attributes.REQUEST).get();
+        Route route = channel.attr(Attributes.GATEWAY_ROUTE_ATTR).get();
         //获得uri
         String uri = httpRequest.uri();
+        //TODO 将后端转发逻辑交给新类去处理，本次filter只负责传递传参并调用
 
-        //获得Request Method
-        HttpMethod method = httpRequest.method();
         //TODO 将本Channel的Request进行转发到Route对应的URI中去
         //TODO 所以是需要构建一个HttpClient，进行请求转发
         //TODO 两种做法：

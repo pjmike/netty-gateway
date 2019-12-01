@@ -1,12 +1,10 @@
 package com.pjmike.server;
 
-import com.pjmike.handler.HttpHandlerInitializer;
+import com.pjmike.handler.server.HttpHandlerInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.util.concurrent.DefaultThreadFactory;
 
 /**
