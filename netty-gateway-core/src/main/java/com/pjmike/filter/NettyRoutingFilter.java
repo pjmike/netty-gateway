@@ -5,6 +5,9 @@ import com.pjmike.route.Route;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpMethod;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 
 /**
  * @description: 路由转发过滤器
@@ -24,6 +27,8 @@ public class NettyRoutingFilter implements GatewayFilter{
         //TODO 所以是需要构建一个HttpClient，进行请求转发
         //TODO 两种做法：
         //TODO 1. 可以考虑使用开源的HttpClient进行转发,2. 自定义构建一个Client,使用Netty进行转发
+        //我们先采用开源的HttpClient库进行使用
+
 
     }
 }
