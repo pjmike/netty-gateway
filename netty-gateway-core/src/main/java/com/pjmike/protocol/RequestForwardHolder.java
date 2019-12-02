@@ -5,7 +5,8 @@ import io.netty.handler.codec.http.HttpRequest;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.net.URL;
+import java.net.InetSocketAddress;
+import java.net.URI;
 
 /**
  * @description: 进行请求转发的内容容器
@@ -16,13 +17,28 @@ import java.net.URL;
 @NoArgsConstructor
 public class RequestForwardHolder {
     private Route route;
-    private URL url;
+    private URI uri;
     private HttpRequest httpRequest;
 
-    public RequestForwardHolder(Route route, URL url, HttpRequest httpRequest) {
+    public RequestForwardHolder(Route route, URI uri, HttpRequest httpRequest) {
         this.route = route;
-        this.url = url;
+        this.uri = uri;
         this.httpRequest = httpRequest;
+    }
+
+    private String getHost() {
+        String host = uri.getHost();
+        if (host == null) {
+            throw new RuntimeException("no host found");
+        }
+        return host;
+    }
+
+    public InetSocketAddress getSocketAddress() {
+        return new InetSocketAddress(getHost(), getPort());
+    }
+    private int getPort() {
+        return uri.getPort();
     }
     //TODO 如何获取URL，也就是将URI转换成URL
 }

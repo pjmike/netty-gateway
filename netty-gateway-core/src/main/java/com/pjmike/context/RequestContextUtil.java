@@ -4,6 +4,8 @@ import com.pjmike.attribute.Attributes;
 import com.pjmike.route.Route;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.FullHttpResponse;
+import io.netty.handler.codec.http.HttpResponse;
 
 /**
  * @description:
@@ -21,5 +23,8 @@ public class RequestContextUtil {
 
     public static void setRoute(Channel channel, Route route) {
         channel.attr(Attributes.GATEWAY_ROUTE_ATTR).set(route);
+    }
+    public static void setResponse(Channel channel, FullHttpResponse httpResponse) {
+        channel.attr(Attributes.RESPONSE).set(httpResponse);
     }
 }

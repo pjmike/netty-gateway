@@ -47,4 +47,13 @@ public class GatewayExecutor {
                 .findFirst()
                 .orElse(null);
     }
+
+    /**
+     * TODO 将下游响应数据进行写回
+     *
+     * @param channel
+     */
+    protected void postResponse(Channel channel) {
+        //TODO
+    }
 }
