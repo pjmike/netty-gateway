@@ -1,16 +1,21 @@
 package com.pjmike.utils;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.*;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,6 +48,7 @@ public class HttpClientUtils {
     private static final int DEFAULT_MAX_PER_ROUTE = 64;
 
     private static PoolingHttpClientConnectionManager httpclientPool = new PoolingHttpClientConnectionManager();
+
     static {
         httpclientPool.setMaxTotal(DEFAULT_MAX_TOTAL);
         httpclientPool.setDefaultMaxPerRoute(DEFAULT_MAX_PER_ROUTE);
@@ -52,9 +58,11 @@ public class HttpClientUtils {
     public static HttpResponse get(String url) throws Exception {
         return get(url, null, null);
     }
-    public static HttpResponse get(String url,Map<String,String> params) throws Exception {
+
+    public static HttpResponse get(String url, Map<String, String> params) throws Exception {
         return get(url, null, params);
     }
+
     public static HttpResponse get(String url, Map<String, String> headers, Map<String, String> params) throws Exception {
         URIBuilder uriBuilder = new URIBuilder(url);
         if (params != null) {
@@ -63,56 +71,56 @@ public class HttpClientUtils {
         //创建http对象
         HttpGet httpGet = new HttpGet(uriBuilder.build());
 
-        RequestConfig requestConfig = RequestConfig.custom()
-                .setConnectTimeout(DEFAULT_CONNECT_TIMEOUT)
-                .setSocketTimeout(DEFAULT_SOCKET_TIMEOUT)
-                .setConnectionRequestTimeout(DEFAULT_TIMEOUT)
-                .build();
-
-        httpGet.setConfig(requestConfig);
+        httpGet.setConfig(getRequestConfig());
 
         //设置请求头
         setHeader(headers, httpGet);
-        //创建HttpClient
-        CloseableHttpClient httpClient = HttpClients.custom()
-                .setConnectionManager(httpclientPool)
-                .build();
+        //创建HttpClient对象
+        CloseableHttpClient httpClient = getHttpClient();
+        return getHttpResponse(httpClient, httpGet);
 
-        //创建HttpResponse对象
-        CloseableHttpResponse httpResponse = null;
-        try {
-            return getHttpClientResult(httpResponse, httpClient, httpGet);
-        } finally {
-            release(httpResponse, httpClient);
-        }
     }
 
-    public static HttpResponse post(String url) throws Exception{
-        return null;
-    }
-    public static HttpResponse post(String url,Map<Object,Object> params) throws Exception {
-        return null;
-    }
-    public static HttpResponse post(String url,Map<String,String> header,Map<Object,Object> params) throws Exception {
-        return null;
+    public static HttpResponse post(String url) throws Exception {
+        return post(url, null, null);
     }
 
-    private static void release(CloseableHttpResponse httpResponse, CloseableHttpClient httpClient) {
-        
+    public static HttpResponse post(String url, Map<Object, Object> params) throws Exception {
+        return post(url, null, params);
+    }
+
+    public static HttpResponse post(String url, Map<String, String> header, Map<Object, Object> params) throws Exception {
+        CloseableHttpClient httpClient = getHttpClient();
+        HttpPost httpPost = new HttpPost(url);
+        httpPost.setConfig(getRequestConfig());
+        //设置请求头
+        setHeader(header, httpPost);
+        //设置请求体
+        setParams(params, httpPost);
+        //获取响应结果
+        return getHttpResponse(httpClient, httpPost);
+    }
+
+    private static void release(HttpResponse httpResponse, HttpClient httpClient) {
+        //TODO
     }
 
     /**
      * 获取响应结果
      *
-     * @param httpResponse
      * @param httpClient
      * @param httpMethod
      * @return
      */
-    private static HttpResponse getHttpClientResult(CloseableHttpResponse httpResponse, CloseableHttpClient httpClient, HttpRequestBase httpMethod) throws IOException {
-        //执行请求
-        httpResponse = httpClient.execute(httpMethod);
-        return httpResponse;
+    private static HttpResponse getHttpResponse(HttpClient httpClient, HttpRequestBase httpMethod) throws IOException {
+        //创建HttpResponse对象
+        HttpResponse httpResponse = null;
+        try {
+            httpResponse = httpClient.execute(httpMethod);
+            return httpResponse;
+        } finally {
+            release(httpResponse, httpClient);
+        }
     }
 
     /**
@@ -126,5 +134,48 @@ public class HttpClientUtils {
             return;
         }
         headers.forEach(httpRequestBase::setHeader);
+    }
+
+    /**
+     * 设置请求体
+     *
+     * @param params
+     * @param httpMethod
+     * @throws UnsupportedEncodingException
+     */
+    private static void setParams(Map<Object, Object> params, HttpEntityEnclosingRequestBase httpMethod) throws UnsupportedEncodingException {
+        if (params == null) {
+            return;
+        }
+        List<NameValuePair> nameValuePairs = new ArrayList<>();
+        params.forEach((key, value) -> nameValuePairs.add(new BasicNameValuePair(String.valueOf(key), String.valueOf(value))));
+        httpMethod.setEntity(new UrlEncodedFormEntity(nameValuePairs, ENCODING));
+    }
+
+    /**
+     * 创建HttpClient
+     *
+     * @return
+     */
+    private static CloseableHttpClient getHttpClient() {
+        //创建HttpClient
+        CloseableHttpClient httpClient = HttpClients.custom()
+                .setConnectionManager(httpclientPool)
+                .build();
+        return httpClient;
+    }
+
+    /**
+     * 配置请求的超时设置
+     *
+     * @return
+     */
+    private static RequestConfig getRequestConfig() {
+        RequestConfig requestConfig = RequestConfig.custom()
+                .setConnectTimeout(DEFAULT_CONNECT_TIMEOUT)
+                .setSocketTimeout(DEFAULT_SOCKET_TIMEOUT)
+                .setConnectionRequestTimeout(DEFAULT_TIMEOUT)
+                .build();
+        return requestConfig;
     }
 }
