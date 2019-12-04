@@ -40,5 +40,4 @@ public class RequestForwardHolder {
     private int getPort() {
         return uri.getPort();
     }
-    //TODO 如何获取URL，也就是将URI转换成URL
 }
