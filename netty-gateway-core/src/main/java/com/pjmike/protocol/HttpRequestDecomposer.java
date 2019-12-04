@@ -1,12 +1,11 @@
 package com.pjmike.protocol;
 
-import io.netty.handler.codec.http.FullHttpRequest;
-import io.netty.handler.codec.http.QueryStringDecoder;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import io.netty.handler.codec.http.*;
+import io.netty.util.CharsetUtil;
 
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @description:
@@ -35,7 +34,7 @@ public class HttpRequestDecomposer {
      * @return
      */
     public String getPath() {
-        QueryStringDecoder stringDecoder = new QueryStringDecoder(getUri(), StandardCharsets.UTF_8);
+        QueryStringDecoder stringDecoder = new QueryStringDecoder(getUri(), CharsetUtil.UTF_8);
         return stringDecoder.path();
     }
 
@@ -45,16 +44,62 @@ public class HttpRequestDecomposer {
      * @return
      */
     public Map<String, List<String>> getParams() {
-        QueryStringDecoder stringDecoder = new QueryStringDecoder(getUri(), StandardCharsets.UTF_8);
-        return stringDecoder.parameters();
+        Map<String, List<String>> paramMap = new HashMap<>();
+        HttpMethod method = httpRequest.method();
+        if (Objects.equals(HttpMethod.GET,method)) {
+            QueryStringDecoder stringDecoder = new QueryStringDecoder(getUri(), CharsetUtil.UTF_8);
+            paramMap = stringDecoder.parameters();
+        } else if (Objects.equals(HttpMethod.POST, method)) {
+            paramMap = getPostParamMap(httpRequest);
+        }
+        return paramMap;
     }
 
+    /**
+     * 获取POST请求参数
+     *
+     * @param httpRequest
+     * @return
+     */
+    private Map<String, List<String>> getPostParamMap(FullHttpRequest httpRequest) {
+        Map<String, List<String>> paramMap = new HashMap<>();
+        String contentType = getContentType(httpRequest.headers());
+        if (HttpHeaderValues.APPLICATION_JSON.toString().equals(contentType)) {
+            //TODO
+            String content = httpRequest.content().toString();
+            JSONObject jsonContent = JSON.parseObject(content);
+
+        } else if (HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED.toString().equals(contentType)) {
+            QueryStringDecoder queryStringDecoder = new QueryStringDecoder(httpRequest.content().toString(CharsetUtil.UTF_8));
+            paramMap = queryStringDecoder.parameters();
+        }
+        return paramMap;
+    }
+
+    /**
+     * 获取ContentType
+     * @param headers http请求头
+     * @return
+     */
+    private String getContentType(HttpHeaders headers) {
+        String contentType = headers.get(HttpHeaderNames.CONTENT_TYPE);
+        String[] strings = contentType.split(";");
+        return strings[0];
+    }
+
+    /**
+     * 获取请求头
+     *
+     * @return
+     */
     public Map<String, List<String>> getHeader() {
         Map<String, List<String>> header = new HashMap<>();
         httpRequest.headers().entries()
-                .forEach(stringStringEntry -> {
-                    //TODO
+                .forEach(entry-> {
+                    List<String> values = header.computeIfAbsent(entry.getKey(), k -> new ArrayList<>());
+                    values.add(entry.getValue());
                 });
         return header;
     }
+
 }
