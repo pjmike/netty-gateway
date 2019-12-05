@@ -1,5 +1,7 @@
 package com.pjmike.route;
 
+import io.netty.channel.Channel;
+
 import java.util.List;
 
 /**
@@ -14,4 +16,6 @@ public interface RouteLocator {
      * @return
      */
     List<Route> getRoutes();
+
+    Route lookupRoute(Channel channel);
 }

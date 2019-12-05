@@ -24,7 +24,7 @@ public class GatewayExecutor {
     public void execute(Channel channel) {
         //第一步：找出所有的Routes
         //第二步：遍历所有的Routes，利用Predicate判断是否满足路由，找出符合条件的路由
-        Route route = lookupRoute(channel);
+        Route route = routeLocator.lookupRoute(channel);
         if (Objects.isNull(route)) {
             return;
         }
@@ -34,19 +34,7 @@ public class GatewayExecutor {
         webHandler.handle(channel);
     }
 
-    /**
-     * 找出所有的路由Route
-     *
-     * @param channel
-     * @return
-     */
-    protected Route lookupRoute(Channel channel) {
-        return this.routeLocator.getRoutes()
-                .stream()
-                .filter(route -> route.getPredicate().test(channel))
-                .findFirst()
-                .orElse(null);
-    }
+
 
     /**
      * TODO 将下游响应数据进行写回

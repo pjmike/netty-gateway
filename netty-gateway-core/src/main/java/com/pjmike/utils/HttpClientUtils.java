@@ -1,6 +1,5 @@
 package com.pjmike.utils;
 
-import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -19,34 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.pjmike.constants.HttpClientConstants.*;
 /**
  * @description:
  * @author: pjmike
  * @create: 2019/12/02
  */
 public class HttpClientUtils {
-    private static final String ENCODING = "UTF-8";
-    /**
-     * 建立连接时间
-     */
-    private static final int DEFAULT_CONNECT_TIMEOUT = 6000;
-    /**
-     * 等待数据的超时时间
-     */
-    private static final int DEFAULT_SOCKET_TIMEOUT = 6000;
-    /**
-     * 从连接池中获取连接的超时时间
-     */
-    private static final int DEFAULT_TIMEOUT = 6000;
 
-    /**
-     * 最大支持的连接数
-     */
-    private static final int DEFAULT_MAX_TOTAL = 512;
-    /**
-     * 针对某个域名的最大连接数
-     */
-    private static final int DEFAULT_MAX_PER_ROUTE = 64;
 
     private static PoolingHttpClientConnectionManager httpclientPool = new PoolingHttpClientConnectionManager();
 

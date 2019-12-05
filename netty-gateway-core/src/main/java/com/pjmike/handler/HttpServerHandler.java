@@ -1,4 +1,4 @@
-package com.pjmike.handler.server;
+package com.pjmike.handler;
 
 import com.pjmike.context.RequestContextUtil;
 import io.netty.channel.Channel;

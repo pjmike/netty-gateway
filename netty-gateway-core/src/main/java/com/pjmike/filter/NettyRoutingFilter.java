@@ -2,8 +2,8 @@ package com.pjmike.filter;
 
 import com.pjmike.attribute.Attributes;
 import com.pjmike.context.RequestContextUtil;
-import com.pjmike.protocol.HttpClientExecutor;
-import com.pjmike.protocol.HttpRequestDecomposer;
+import com.pjmike.execute.HttpClientExecutor;
+import com.pjmike.protocol.HttpRequestDecompose;
 import com.pjmike.route.Route;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.FullHttpRequest;
@@ -12,7 +12,19 @@ import io.netty.handler.codec.http.FullHttpResponse;
 import java.io.IOException;
 
 /**
- * @description: 路由转发过滤器
+ * <p>
+ *  路由转发过滤器
+ * </p>
+ *
+ * <p>
+ * 将HTTP请求进行转发，本filter只负责传递参数，调用相应网络类进行请求
+ * </p>
+ *
+ * <p>
+ *  有两种做法进行HTTP请求转发：
+ *  1. 使用开源的HTTP网络库进行转发，比如HttpClient、OkHttp、Feign、Vert.x等
+ *  2. 使用Netty自定义Netty客户端，比较繁琐
+ * </p>
  * @author: pjmike
  * @create: 2019/11/29
  */
@@ -21,15 +33,9 @@ public class NettyRoutingFilter implements GatewayFilter{
     public void filter(Channel channel, GatewayFilterChain chain) {
         FullHttpRequest httpRequest = channel.attr(Attributes.REQUEST).get();
         Route route = channel.attr(Attributes.GATEWAY_ROUTE_ATTR).get();
-        HttpRequestDecomposer requestDecomposer = new HttpRequestDecomposer(httpRequest, route);
-        //TODO 将后端转发逻辑交给新类去处理，本次filter只负责传递传参并调用
-        //      将本Channel的Request进行转发到Route对应的URI中去
-        //        所以是需要构建一个HttpClient，进行请求转发
-        //         两种做法：
-        //           1. 可以考虑使用开源的Http网络库进行转发,比如HttpClient,OkHttp,Feign
-        //           2. 自定义构建一个Client,使用Netty进行转发
+        HttpRequestDecompose requestDecompose = new HttpRequestDecompose(httpRequest, route);
         try {
-             FullHttpResponse httpResponse = HttpClientExecutor.execute(httpRequest, requestDecomposer);
+            FullHttpResponse httpResponse = HttpClientExecutor.execute(httpRequest, requestDecompose);
             RequestContextUtil.setResponse(channel, httpResponse);
         } catch (IOException e) {
             e.printStackTrace();

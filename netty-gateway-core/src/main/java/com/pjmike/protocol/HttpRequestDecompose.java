@@ -3,9 +3,7 @@ package com.pjmike.protocol;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.pjmike.constants.HttpContants;
 import com.pjmike.route.Route;
-import com.pjmike.utils.HttpClientUtils;
 import com.pjmike.utils.PrimitiveTypeUtil;
 import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
@@ -14,14 +12,14 @@ import java.lang.reflect.Array;
 import java.util.*;
 
 /**
- * @description:
+ * @description: 获取HttpRequest中的一些详细信息，比如请求头，请求参数等
  * @author: pjmike
  * @create: 2019/12/04
  */
-public class HttpRequestDecomposer {
+public class HttpRequestDecompose {
     private FullHttpRequest httpRequest;
     private Route route;
-    public HttpRequestDecomposer(FullHttpRequest httpRequest,Route route) {
+    public HttpRequestDecompose(FullHttpRequest httpRequest, Route route) {
         this.route = route;
         this.httpRequest = httpRequest;
     }

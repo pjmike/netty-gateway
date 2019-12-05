@@ -1,4 +1,4 @@
-package com.pjmike.handler.server;
+package com.pjmike.handler;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;

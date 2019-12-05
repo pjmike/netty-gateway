@@ -1,6 +1,6 @@
 package com.pjmike.server;
 
-import com.pjmike.handler.server.HttpHandlerInitializer;
+import com.pjmike.handler.HttpHandlerInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;

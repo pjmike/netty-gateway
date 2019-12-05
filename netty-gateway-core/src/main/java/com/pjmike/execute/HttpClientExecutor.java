@@ -1,5 +1,6 @@
-package com.pjmike.protocol;
+package com.pjmike.execute;
 
+import com.pjmike.protocol.HttpRequestDecompose;
 import com.pjmike.utils.HttpClientUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -19,11 +20,19 @@ import java.util.Objects;
  * @create: 2019/12/05
  */
 public class HttpClientExecutor {
-    public static FullHttpResponse execute(FullHttpRequest httpRequest, HttpRequestDecomposer requestDecomposer) throws IOException {
+    /**
+     * 执行HTTP请求
+     *
+     * @param httpRequest
+     * @param requestDecompose
+     * @return {@link FullHttpResponse}
+     * @throws IOException
+     */
+    public static FullHttpResponse execute(FullHttpRequest httpRequest, HttpRequestDecompose requestDecompose) throws IOException {
         HttpMethod method = httpRequest.method();
-        String uri = requestDecomposer.getUri();
-        Map<String, List<String>> params = requestDecomposer.getParams();
-        Map<String, List<String>> header = requestDecomposer.getHeader();
+        String uri = requestDecompose.getUri();
+        Map<String, List<String>> params = requestDecompose.getParams();
+        Map<String, List<String>> header = requestDecompose.getHeader();
         org.apache.http.HttpResponse response = null;
         try {
             if (Objects.equals(HttpMethod.GET, method)) {
@@ -36,8 +45,8 @@ public class HttpClientExecutor {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        FullHttpResponse result = convert(response, httpRequest);
-        return result;
+
+        return convert(response, httpRequest);
     }
 
     /**
