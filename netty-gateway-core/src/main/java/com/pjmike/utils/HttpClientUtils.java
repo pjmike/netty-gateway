@@ -1,5 +1,6 @@
 package com.pjmike.utils;
 
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -59,14 +60,14 @@ public class HttpClientUtils {
         return get(url, null, null);
     }
 
-    public static HttpResponse get(String url, Map<String, String> params) throws Exception {
+    public static HttpResponse get(String url, Map<String, List<String>> params) throws Exception {
         return get(url, null, params);
     }
 
-    public static HttpResponse get(String url, Map<String, String> headers, Map<String, String> params) throws Exception {
+    public static HttpResponse get(String url, Map<String, List<String>> headers, Map<String, List<String>> params) throws Exception {
         URIBuilder uriBuilder = new URIBuilder(url);
         if (params != null) {
-            params.forEach(uriBuilder::setParameter);
+            params.forEach((param,valueList)-> valueList.forEach(value-> uriBuilder.setParameter(param, value)));
         }
         //创建http对象
         HttpGet httpGet = new HttpGet(uriBuilder.build());
@@ -85,17 +86,17 @@ public class HttpClientUtils {
         return post(url, null, null);
     }
 
-    public static HttpResponse post(String url, Map<Object, Object> params) throws Exception {
+    public static HttpResponse post(String url, Map<String, List<String>> params) throws Exception {
         return post(url, null, params);
     }
 
-    public static HttpResponse post(String url, Map<String, String> header, Map<Object, Object> params) throws Exception {
+    public static HttpResponse post(String url, Map<String, List<String>> header, Map<String, List<String>> params) throws Exception {
         CloseableHttpClient httpClient = getHttpClient();
         HttpPost httpPost = new HttpPost(url);
         httpPost.setConfig(getRequestConfig());
         //设置请求头
         setHeader(header, httpPost);
-        //设置请求体
+        //设置请求参数
         setParams(params, httpPost);
         //获取响应结果
         return getHttpResponse(httpClient, httpPost);
@@ -129,11 +130,11 @@ public class HttpClientUtils {
      * @param headers
      * @param httpRequestBase
      */
-    private static void setHeader(Map<String, String> headers, HttpRequestBase httpRequestBase) {
+    private static void setHeader(Map<String, List<String>> headers, HttpRequestBase httpRequestBase) {
         if (headers == null) {
             return;
         }
-        headers.forEach(httpRequestBase::setHeader);
+        headers.forEach((key,valueList)-> valueList.forEach(value -> httpRequestBase.setHeader(key, value)));
     }
 
     /**
@@ -143,12 +144,14 @@ public class HttpClientUtils {
      * @param httpMethod
      * @throws UnsupportedEncodingException
      */
-    private static void setParams(Map<Object, Object> params, HttpEntityEnclosingRequestBase httpMethod) throws UnsupportedEncodingException {
+    private static void setParams(Map<String, List<String>> params, HttpEntityEnclosingRequestBase httpMethod) throws UnsupportedEncodingException {
         if (params == null) {
             return;
         }
         List<NameValuePair> nameValuePairs = new ArrayList<>();
-        params.forEach((key, value) -> nameValuePairs.add(new BasicNameValuePair(String.valueOf(key), String.valueOf(value))));
+        params.forEach((key, valueList) -> valueList.forEach(value -> {
+            nameValuePairs.add(new BasicNameValuePair(key, value));
+        }));
         httpMethod.setEntity(new UrlEncodedFormEntity(nameValuePairs, ENCODING));
     }
 

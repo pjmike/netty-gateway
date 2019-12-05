@@ -1,10 +1,16 @@
 package com.pjmike.protocol;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.pjmike.constants.HttpContants;
+import com.pjmike.route.Route;
+import com.pjmike.utils.HttpClientUtils;
+import com.pjmike.utils.PrimitiveTypeUtil;
 import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -14,8 +20,9 @@ import java.util.*;
  */
 public class HttpRequestDecomposer {
     private FullHttpRequest httpRequest;
-
-    public HttpRequestDecomposer(FullHttpRequest httpRequest) {
+    private Route route;
+    public HttpRequestDecomposer(FullHttpRequest httpRequest,Route route) {
+        this.route = route;
         this.httpRequest = httpRequest;
     }
 
@@ -25,7 +32,7 @@ public class HttpRequestDecomposer {
      * @return
      */
     public String getUri() {
-        return httpRequest.uri();
+        return route.getUri().toString();
     }
 
     /**
@@ -65,10 +72,11 @@ public class HttpRequestDecomposer {
         Map<String, List<String>> paramMap = new HashMap<>();
         String contentType = getContentType(httpRequest.headers());
         if (HttpHeaderValues.APPLICATION_JSON.toString().equals(contentType)) {
-            //TODO
             String content = httpRequest.content().toString();
             JSONObject jsonContent = JSON.parseObject(content);
-
+            for (Map.Entry<String, Object> item : jsonContent.entrySet()) {
+                convert2Map(paramMap, item.getKey(), item.getValue());
+            }
         } else if (HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED.toString().equals(contentType)) {
             QueryStringDecoder queryStringDecoder = new QueryStringDecoder(httpRequest.content().toString(CharsetUtil.UTF_8));
             paramMap = queryStringDecoder.parameters();
@@ -102,4 +110,50 @@ public class HttpRequestDecomposer {
         return header;
     }
 
+    /**
+     * 格式转换
+     *
+     * @param paramsMap
+     * @param key
+     * @param value
+     * @return
+     */
+    private void convert2Map(Map<String, List<String>> paramsMap, String key, Object value) {
+        List<String> valueList;
+        if (paramsMap.containsKey(key)) {
+            valueList = paramsMap.get(key);
+        } else {
+            valueList = new ArrayList<>();
+        }
+        Class<?> valueClass = value.getClass();
+        if (PrimitiveTypeUtil.isPriType(valueClass)) {
+            valueList.add(value.toString());
+            paramsMap.put(key, valueList);
+        } else if (valueClass.isArray()) {
+            int length = Array.getLength(value);
+            for(int i=0; i<length; i++){
+                String arrayItem = String.valueOf(Array.get(value, i));
+                valueList.add(arrayItem);
+            }
+            paramsMap.put(key, valueList);
+        } else if (List.class.isAssignableFrom(valueClass)) {
+            if(valueClass.equals(JSONArray.class)){
+                JSONArray jArray = JSONArray.parseArray(value.toString());
+                for(int i=0; i<jArray.size(); i++){
+                    valueList.add(jArray.getString(i));
+                }
+            }else{
+                valueList = (ArrayList<String>) value;
+            }
+            paramsMap.put(key, valueList);
+
+        }else if(Map.class.isAssignableFrom(valueClass)){
+            Map<String, String> tempMap = (Map<String, String>) value;
+            tempMap.forEach((k,v)->{
+                List<String> tempList = new ArrayList<>();
+                tempList.add(v);
+                paramsMap.put(k, tempList);
+            });
+        }
+    }
 }

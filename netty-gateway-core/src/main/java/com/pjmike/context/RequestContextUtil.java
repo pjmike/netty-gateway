@@ -27,4 +27,8 @@ public class RequestContextUtil {
     public static void setResponse(Channel channel, FullHttpResponse httpResponse) {
         channel.attr(Attributes.RESPONSE).set(httpResponse);
     }
+
+    public static FullHttpResponse getResponse(Channel channel) {
+        return channel.attr(Attributes.RESPONSE).get();
+    }
 }
