@@ -19,7 +19,13 @@ import java.util.Objects;
  * @author: pjmike
  * @create: 2019/12/05
  */
-public class HttpClientExecutor {
+public class HttpClientExecutor extends AbstractExecutor<FullHttpResponse> {
+
+    private static HttpClientExecutor INSTANCE = new HttpClientExecutor();
+
+    public static HttpClientExecutor getInstance() {
+        return INSTANCE;
+    }
     /**
      * 执行HTTP请求
      *
@@ -28,7 +34,7 @@ public class HttpClientExecutor {
      * @return {@link FullHttpResponse}
      * @throws IOException
      */
-    public static FullHttpResponse execute(FullHttpRequest httpRequest, HttpRequestDecompose requestDecompose) throws IOException {
+    private FullHttpResponse execute(FullHttpRequest httpRequest, HttpRequestDecompose requestDecompose) throws IOException {
         HttpMethod method = httpRequest.method();
         String uri = requestDecompose.getUri();
         Map<String, List<String>> params = requestDecompose.getParams();
@@ -57,7 +63,7 @@ public class HttpClientExecutor {
      * @return
      * @throws IOException
      */
-    private static FullHttpResponse convert(org.apache.http.HttpResponse httpResponse,FullHttpRequest originHttpRequest) throws IOException {
+    private FullHttpResponse convert(org.apache.http.HttpResponse httpResponse,FullHttpRequest originHttpRequest) throws IOException {
         HttpEntity entity = httpResponse.getEntity();
         String content = EntityUtils.toString(entity, CharsetUtil.UTF_8);
         int statusCode = httpResponse.getStatusLine().getStatusCode();
@@ -65,5 +71,12 @@ public class HttpClientExecutor {
         ByteBuf byteBuf = PooledByteBufAllocator.DEFAULT.buffer();
         byteBuf.writeBytes(content.getBytes());
         return new DefaultFullHttpResponse(originHttpRequest.protocolVersion(), httpResponseStatus,byteBuf);
+    }
+
+    @Override
+    protected FullHttpResponse doExecute(Object... args) throws IOException {
+        FullHttpRequest httpRequest = (FullHttpRequest)args[0];
+        HttpRequestDecompose requestDecompose = (HttpRequestDecompose)args[1];
+        return execute(httpRequest, requestDecompose);
     }
 }

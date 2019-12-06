@@ -9,7 +9,6 @@ import io.netty.channel.Channel;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
 
-import java.io.IOException;
 
 /**
  * <p>
@@ -34,12 +33,13 @@ public class NettyRoutingFilter implements GatewayFilter{
         FullHttpRequest httpRequest = channel.attr(Attributes.REQUEST).get();
         Route route = channel.attr(Attributes.GATEWAY_ROUTE_ATTR).get();
         HttpRequestDecompose requestDecompose = new HttpRequestDecompose(httpRequest, route);
+        FullHttpResponse httpResponse = null;
         try {
-            FullHttpResponse httpResponse = HttpClientExecutor.execute(httpRequest, requestDecompose);
-            RequestContextUtil.setResponse(channel, httpResponse);
-        } catch (IOException e) {
+            httpResponse = HttpClientExecutor.getInstance().execute(httpRequest, requestDecompose);
+        } catch (Exception e) {
             e.printStackTrace();
         }
+        RequestContextUtil.setResponse(channel, httpResponse);
         chain.filter(channel);
     }
 }
