@@ -1,7 +1,6 @@
 package com.pjmike.route;
 
-import io.netty.channel.Channel;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,9 +9,25 @@ import java.util.List;
  * @create: 2019/12/05
  */
 public class CompositeRouteLocator extends AbstractRouteLocator{
+    /**
+     * RouteLocator集合
+     */
+    private List<RouteLocator> delegates;
+
+    public CompositeRouteLocator(List<RouteLocator> delegates) {
+        this.delegates = delegates;
+    }
+
     @Override
-    public List<Route> getRoutes() {
-        //TODO
-        return null;
+    public List<Route> getRoutes() throws Exception{
+        List<Route> routes = new ArrayList<>();
+        delegates.forEach(routeLocator -> {
+            try {
+                routes.addAll(routeLocator.getRoutes());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        return routes;
     }
 }

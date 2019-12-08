@@ -1,6 +1,7 @@
 package com.pjmike.handler;
 
 import com.pjmike.context.RequestContextUtil;
+import com.pjmike.execute.GatewayExecutor;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -24,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
  * @create: 2019/11/25
  */
 @Slf4j
-public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
+public class DispatcherHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest httpRequest) throws Exception {
         Channel channel = ctx.channel();

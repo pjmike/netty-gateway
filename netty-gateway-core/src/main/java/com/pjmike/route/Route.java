@@ -20,19 +20,27 @@ public class Route {
     /**
      * 路由id
      */
-    private final String id;
+    private  String id;
     /**
      * 路由向的URI
      */
-    private final URI uri;
+    private  URI uri;
     /**
      * 过滤器数组
      */
-    private final List<GatewayFilter> gatewayFilters;
+    private  List<GatewayFilter> gatewayFilters;
     /**
      * 断言
      */
-    private final Predicate<Channel> predicate;
+    private  Predicate<Channel> predicate;
+
+    public Route(String id, URI uri) {
+        this(id, uri, null);
+    }
+
+    public Route(String id, URI uri, Predicate<Channel> predicate) {
+        this(id, uri, null,predicate);
+    }
 
     public Route(String id, URI uri, List<GatewayFilter> gatewayFilters, Predicate<Channel> predicate) {
         this.id = id;
@@ -40,4 +48,5 @@ public class Route {
         this.gatewayFilters = gatewayFilters;
         this.predicate = predicate;
     }
+
 }

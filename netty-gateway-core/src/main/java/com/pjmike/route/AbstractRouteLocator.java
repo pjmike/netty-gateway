@@ -10,7 +10,7 @@ import io.netty.channel.Channel;
 public abstract class AbstractRouteLocator implements RouteLocator{
 
     @Override
-    public Route lookupRoute(Channel channel) {
+    public Route lookupRoute(Channel channel) throws Exception{
         return getRoutes()
                 .stream()
                 .filter(route -> route.getPredicate().test(channel))

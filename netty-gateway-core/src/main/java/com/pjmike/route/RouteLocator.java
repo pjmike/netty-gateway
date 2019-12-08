@@ -2,6 +2,7 @@ package com.pjmike.route;
 
 import io.netty.channel.Channel;
 
+import java.net.URISyntaxException;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ public interface RouteLocator {
      *
      * @return
      */
-    List<Route> getRoutes();
+    List<Route> getRoutes() throws Exception;
 
-    Route lookupRoute(Channel channel);
+    Route lookupRoute(Channel channel) throws Exception;
 }
