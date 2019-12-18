@@ -1,5 +1,6 @@
 package com.pjmike.filter;
 
+import com.pjmike.annotation.Order;
 import com.pjmike.attribute.Attributes;
 import com.pjmike.context.RequestContextUtil;
 import com.pjmike.execute.HttpClientExecutor;
@@ -22,11 +23,12 @@ import io.netty.handler.codec.http.FullHttpResponse;
  * <p>
  *  有两种做法进行HTTP请求转发：
  *  1. 使用开源的HTTP网络库进行转发，比如HttpClient、OkHttp、Feign、Vert.x等
- *  2. 使用Netty自定义Netty客户端，比较繁琐
+ *  2. 使用Netty自定义Netty客户端
  * </p>
  * @author: pjmike
  * @create: 2019/11/29
  */
+@Order(2)
 public class NettyRoutingFilter implements GatewayFilter{
     @Override
     public void filter(Channel channel, GatewayFilterChain chain) {

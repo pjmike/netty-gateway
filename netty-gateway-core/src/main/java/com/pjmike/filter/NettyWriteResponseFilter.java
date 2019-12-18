@@ -1,5 +1,6 @@
 package com.pjmike.filter;
 
+import com.pjmike.annotation.Order;
 import com.pjmike.context.RequestContextUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -10,6 +11,7 @@ import io.netty.handler.codec.http.FullHttpResponse;
  * @author: pjmike
  * @create: 2019/11/29
  */
+@Order(3)
 public class NettyWriteResponseFilter implements GatewayFilter{
     @Override
     public void filter(Channel channel, GatewayFilterChain filterChain) {
