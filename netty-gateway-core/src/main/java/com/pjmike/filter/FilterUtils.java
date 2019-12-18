@@ -25,7 +25,7 @@ public class FilterUtils {
     public FilterUtils getInstance() {
         return INSTANCE;
     }
-    public List<GatewayFilter> getGlobalFilters() {
+    public List<GatewayFilter> loadGlobalFilters() {
         List<GatewayFilter> gatewayFilters = new ArrayList<>();
         try {
             Set<Class<?>> classes = ClassScaner.scanPackageBySuper(CommonConstants.FILTER_SCAN_PACKAGE, GatewayFilter.class);

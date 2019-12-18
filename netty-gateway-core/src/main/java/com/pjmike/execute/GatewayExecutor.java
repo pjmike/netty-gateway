@@ -17,8 +17,8 @@ import java.util.Objects;
  * @create: 2019/11/26
  */
 public class GatewayExecutor extends AbstractExecutor {
-    private final RouteLocator routeLocator;
-    private final WebHandler webHandler;
+    private RouteLocator routeLocator;
+    private WebHandler webHandler;
     public GatewayExecutor(RouteLocator routeLocator, WebHandler webHandler) {
         this.routeLocator = routeLocator;
         this.webHandler = webHandler;
@@ -42,8 +42,9 @@ public class GatewayExecutor extends AbstractExecutor {
             throw new RuntimeException("no available route");
         }
         //为Route设置Filter
-        List<GatewayFilter> globalFilters = FilterUtils.INSTANCE.getGlobalFilters();
+        List<GatewayFilter> globalFilters = FilterUtils.INSTANCE.loadGlobalFilters();
         route.setGatewayFilters(globalFilters);
+
         //第三步: 将Route与Channel进行相应的绑定
         RequestContextUtil.setRoute(channel,route);
         //第四步：在该Channel的Route中，利用Route中的gatewayFilters进行过滤处理，需要经过pre+post

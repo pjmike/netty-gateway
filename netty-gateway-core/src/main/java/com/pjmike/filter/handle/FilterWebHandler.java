@@ -15,7 +15,11 @@ import java.util.List;
  * @create: 2019/11/28
  */
 public class FilterWebHandler implements WebHandler {
+    private static final FilterWebHandler INSTANCE = new FilterWebHandler();
 
+    public static FilterWebHandler getInstance() {
+        return INSTANCE;
+    }
     @Override
     public void handle(Channel channel) {
         Route route = channel.attr(Attributes.GATEWAY_ROUTE_ATTR).get();

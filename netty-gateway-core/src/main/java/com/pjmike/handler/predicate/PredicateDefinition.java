@@ -1,10 +1,7 @@
 package com.pjmike.handler.predicate;
 
 import lombok.Data;
-import org.apache.commons.lang.StringUtils;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * @description: 断言定义

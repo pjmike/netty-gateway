@@ -2,6 +2,9 @@ package com.pjmike.handler;
 
 import com.pjmike.context.RequestContextUtil;
 import com.pjmike.execute.GatewayExecutor;
+import com.pjmike.execute.InitExecutor;
+import com.pjmike.filter.handle.FilterWebHandler;
+import com.pjmike.route.CompositeRouteLocator;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -10,15 +13,15 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>
- *  一个完整的HTTP请求{@link io.netty.handler.codec.http.FullHttpRequest}
- *  由HttpRequest {@link HttpRequest}, HttpContent {@link io.netty.handler.codec.http.HttpContent}，
- *  和LastHttpContent {@link io.netty.handler.codec.http.LastHttpContent} 组成
+ * 一个完整的HTTP请求{@link io.netty.handler.codec.http.FullHttpRequest}
+ * 由HttpRequest {@link HttpRequest}, HttpContent {@link io.netty.handler.codec.http.HttpContent}，
+ * 和LastHttpContent {@link io.netty.handler.codec.http.LastHttpContent} 组成
  * </p>
  *
  * <p>
- *  HttpRequest: 包含HTTP的头部信息
- *  HttpContent: 包含了数据部分,后面可能跟着一个或多个HttpContent部分
- *  LastHttpContent: 标记该HTTP请求的结束
+ * HttpRequest: 包含HTTP的头部信息
+ * HttpContent: 包含了数据部分,后面可能跟着一个或多个HttpContent部分
+ * LastHttpContent: 标记该HTTP请求的结束
  * </p>
  *
  * @author: pjmike
@@ -26,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class DispatcherHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
+    private GatewayExecutor gatewayExecutor = (GatewayExecutor) InitExecutor.routeLocatorMap.get(GatewayExecutor.class.getName());
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest httpRequest) throws Exception {
         Channel channel = ctx.channel();
@@ -34,5 +38,7 @@ public class DispatcherHandler extends SimpleChannelInboundHandler<FullHttpReque
         RequestContextUtil.setKeepAlive(channel, keepAlive);
         //TODO 执行GatewayExecutor的逻辑
         //TODO 需要将FilterWebHandler和RouteLocator注入GatewayExecutor
+        // 执行HTTP转发请求，建议使用独立的线程池进行处理，加快响应速度
+        gatewayExecutor.execute(channel);
     }
 }

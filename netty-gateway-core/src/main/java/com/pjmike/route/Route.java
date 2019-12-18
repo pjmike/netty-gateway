@@ -34,6 +34,9 @@ public class Route {
      */
     private  Predicate<Channel> predicate;
 
+    public Route() {
+    }
+
     public Route(String id, URI uri) {
         this(id, uri, null);
     }
