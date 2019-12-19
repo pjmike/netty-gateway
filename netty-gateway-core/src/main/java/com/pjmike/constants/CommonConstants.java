@@ -16,5 +16,12 @@ public class CommonConstants {
     public static final String PROPERTIES_ROUTE_PREDICATE_PATH = "netty.gateway.routes.predicates.path";
 
     /** ---------------------------文件路径------------------------------**/
+
     public static final String FILTER_SCAN_PACKAGE = "com.pjmike.filter";
+
+
+    /** ---------------------------HTTP------------------------------**/
+    public static final String HTTP = "HTTP";
+
+    public static final String HTTPS = "HTTPS";
 }
