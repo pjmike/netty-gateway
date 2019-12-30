@@ -3,7 +3,7 @@ package com.pjmike.http;
 
 import com.pjmike.route.Route;
 import io.netty.handler.codec.http.HttpRequest;
-import io.netty.handler.codec.http.multipart.HttpPostRequestEncoder;
+import org.apache.http.client.methods.HttpUriRequest;
 
 import java.net.InetSocketAddress;
 import java.net.URL;
@@ -14,15 +14,16 @@ import static com.pjmike.constants.CommonConstants.HTTPS;
 
 /**
  * <p>
- *  此时Netty作为客户端转发HTTP请求，最简单的方法就是使用Netty提供的HttpRequest，略加封装
+ * 此时Netty作为客户端转发HTTP请求，最简单的方法就是使用Netty提供的HttpRequest，略加封装
  * </p>
  * <p>
- *  一些开源项目选择自己定义HttpRequest和HttpResponse
+ * 一些开源项目选择自己定义HttpRequest和HttpResponse
  * </p>
+ *
  * @author: pjmike
  * @create: 2019/12/19
  */
-public class NettyHttpRequest{
+public class NettyHttpRequest {
     private Route route;
     private URL url;
     private HttpRequest httpRequest;
@@ -46,6 +47,7 @@ public class NettyHttpRequest{
     }
 
     /**
+     * 5
      * 获取端口号
      *
      * @return
@@ -66,6 +68,10 @@ public class NettyHttpRequest{
 
     public InetSocketAddress getSocketAddress() {
         return new InetSocketAddress(getHost(), getPort());
+    }
+
+    public HttpRequest getHttpRequest() {
+        return this.httpRequest;
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.pjmike.execute;
 
+import com.pjmike.constants.CommonConstants;
 import com.pjmike.context.RequestContextUtil;
-import com.pjmike.filter.FilterUtils;
 import com.pjmike.filter.GatewayFilter;
 import com.pjmike.filter.handle.WebHandler;
 import com.pjmike.route.Route;
@@ -34,6 +34,7 @@ public class GatewayExecutor extends AbstractExecutor {
 
     @Override
     protected Object doExecute(Object... args) throws Exception {
+        final List<GatewayFilter> filterList = (List<GatewayFilter>) InitExecutor.gatewayConfig.get(CommonConstants.GLOBAL_FILTER_NAME);
         Channel channel = (Channel)args[0];
         //第一步：找出所有的Routes
         //第二步：遍历所有的Routes，利用Predicate判断是否满足路由，找出符合条件的路由
@@ -42,9 +43,7 @@ public class GatewayExecutor extends AbstractExecutor {
             throw new RuntimeException("no available route");
         }
         //为Route设置Filter
-        List<GatewayFilter> globalFilters = FilterUtils.INSTANCE.loadGlobalFilters();
-        route.setGatewayFilters(globalFilters);
-
+        route.setGatewayFilters(filterList);
         //第三步: 将Route与Channel进行相应的绑定
         RequestContextUtil.setRoute(channel,route);
         //第四步：在该Channel的Route中，利用Route中的gatewayFilters进行过滤处理，需要经过pre+post

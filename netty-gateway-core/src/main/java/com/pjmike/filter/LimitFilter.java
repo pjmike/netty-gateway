@@ -13,5 +13,6 @@ public class LimitFilter implements GatewayFilter{
     @Override
     public void filter(Channel channel, GatewayFilterChain filterChain) {
         //限流Filter TODO
+        filterChain.filter(channel);
     }
 }

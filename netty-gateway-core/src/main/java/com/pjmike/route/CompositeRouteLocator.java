@@ -1,7 +1,9 @@
 package com.pjmike.route;
+import cn.hutool.core.collection.CollectionUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -23,7 +25,9 @@ public class CompositeRouteLocator extends AbstractRouteLocator {
     public List<Route> getRoutes() throws Exception {
         List<Route> routes = new ArrayList<>();
         for (RouteLocator routeLocator : delegates) {
-            routes.addAll(routeLocator.getRoutes());
+            if (CollectionUtil.isNotEmpty(routeLocator.getRoutes())) {
+                routes.addAll(routeLocator.getRoutes());
+            }
         }
         return routes;
     }

@@ -24,4 +24,15 @@ public class CommonConstants {
     public static final String HTTP = "HTTP";
 
     public static final String HTTPS = "HTTPS";
+
+    /**
+     * ---------------------------GatewayConfig的Key----------------------
+     **/
+
+    public static final String GATEWAY_EXECUTOR_NAME = "gateway_executor";
+
+    public static final String GLOBAL_FILTER_NAME = "global_filter_name";
+
+
+
 }

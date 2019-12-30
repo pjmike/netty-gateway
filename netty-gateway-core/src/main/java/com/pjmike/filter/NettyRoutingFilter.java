@@ -7,6 +7,7 @@ import com.pjmike.execute.HttpClientExecutor;
 import com.pjmike.http.HttpRequestDecompose;
 import com.pjmike.http.NettyHttpRequest;
 import com.pjmike.http.NettyHttpRequestBuilder;
+import com.pjmike.netty.client.NettyClient;
 import com.pjmike.route.Route;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.FullHttpRequest;
@@ -44,12 +45,16 @@ public class NettyRoutingFilter implements GatewayFilter{
             nettyHttpRequest = requestBuilder.buildHttpRequest(httpRequest, route);
             channel.attr(Attributes.NETTY_PROXY_HTTP_REQUEST).set(nettyHttpRequest);
             //TODO 下一步转发请求
-
+            NettyClient.INSTANCE.request(nettyHttpRequest,channel);
         } catch (Exception e) {
-            log.warn("build nettyHttpRequest failed, {}", e.getMessage());
+            log.warn("build nettyHttpRequest failed, {}", e.getCause());
             e.printStackTrace();
         }
-
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         chain.filter(channel);
     }
 }

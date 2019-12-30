@@ -52,4 +52,13 @@ public class Route {
         this.predicate = predicate;
     }
 
+    @Override
+    public String toString() {
+        return "Route{" +
+                "id='" + id + '\'' +
+                ", uri=" + uri +
+                ", gatewayFilters=" + gatewayFilters +
+                ", predicate=" + predicate +
+                '}';
+    }
 }

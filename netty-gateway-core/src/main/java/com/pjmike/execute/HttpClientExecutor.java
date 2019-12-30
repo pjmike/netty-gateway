@@ -1,9 +1,10 @@
 package com.pjmike.execute;
 
-import com.pjmike.protocol.HttpRequestDecompose;
+import com.pjmike.http.HttpRequestDecompose;
 import com.pjmike.utils.HttpClientUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
+
 import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
 import org.apache.http.HttpEntity;

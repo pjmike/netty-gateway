@@ -29,10 +29,9 @@ public class NettyHttpRequestBuilder {
         log.info("proxy_url is {}", url.toString());
         //请求路径
         QueryStringEncoder queryStringEncoder = new QueryStringEncoder(url.getPath());
+        newRequest = new DefaultFullHttpRequest(nativeRequest.protocolVersion(), nativeRequest.method(), url.toString());
         //将原URL中的请求参数提取出来，放入新的URL中
         buildNewRequestParams(queryStringEncoder);
-
-        newRequest = new DefaultFullHttpRequest(nativeRequest.protocolVersion(), nativeRequest.method(), new URI(queryStringEncoder.toString()).toASCIIString());
 
         //将原URL中的请求头提取出来，放入新的URL中
         buildNewRequestHeader(nativeRequest);
@@ -114,7 +113,11 @@ public class NettyHttpRequestBuilder {
     private String getContentType() {
         HttpHeaders headers = newRequest.headers();
         String contentType = headers.get(HttpHeaderNames.CONTENT_TYPE);
-        String[] strings = contentType.split(";");
-        return strings[0];
+        if (StringUtils.containsIgnoreCase(contentType, ";")) {
+            String[] strings = contentType.split(";");
+            return strings[0];
+        } else {
+            return contentType;
+        }
     }
 }

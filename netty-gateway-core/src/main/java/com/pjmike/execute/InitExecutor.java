@@ -1,5 +1,8 @@
 package com.pjmike.execute;
 
+import com.pjmike.constants.CommonConstants;
+import com.pjmike.filter.FilterRegistry;
+import com.pjmike.filter.GatewayFilter;
 import com.pjmike.filter.handle.FilterWebHandler;
 import com.pjmike.route.*;
 
@@ -13,18 +16,22 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class InitExecutor {
     private static AtomicBoolean init = new AtomicBoolean(false);
-    public static Map<String, Object> routeLocatorMap;
+    public static Map<String, Object> gatewayConfig;
 
     public static void init() {
         if (!init.compareAndSet(false, true)) {
             return;
         }
-        routeLocatorMap = new LinkedHashMap<>();
+        gatewayConfig = new LinkedHashMap<>();
         //初始化RouteLocator
         CompositeRouteLocator compositeRouteLocator = initRouteLocator();
+        //加载Filters
+        List<GatewayFilter> filters = getAllGlobalFilters();
         //init GatewayExecutor
         GatewayExecutor gatewayExecutor = new GatewayExecutor(compositeRouteLocator,FilterWebHandler.getInstance());
-        routeLocatorMap.put(GatewayExecutor.class.getName(), gatewayExecutor);
+
+        gatewayConfig.put(CommonConstants.GATEWAY_EXECUTOR_NAME, gatewayExecutor);
+        gatewayConfig.put(CommonConstants.GLOBAL_FILTER_NAME, filters);
     }
 
     public static CompositeRouteLocator initRouteLocator() {
@@ -33,7 +40,11 @@ public class InitExecutor {
         routeLocators.add(new DiscoveryClientRouteLocator());
         routeLocators.add(new AnnotationRouteLocator());
         CompositeRouteLocator compositeRouteLocator = new CompositeRouteLocator(routeLocators);
-        routeLocatorMap.put(CompositeRouteLocator.class.getName(), compositeRouteLocator);
+        gatewayConfig.put(CompositeRouteLocator.class.getName(), compositeRouteLocator);
         return compositeRouteLocator;
+    }
+
+    public static List<GatewayFilter> getAllGlobalFilters() {
+        return FilterRegistry.INSTANCE.loadGlobalFilters();
     }
 }

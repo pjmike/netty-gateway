@@ -1,4 +1,4 @@
-package com.pjmike.server;
+package com.pjmike.netty.server;
 
 import java.net.InetSocketAddress;
 
@@ -17,9 +17,9 @@ public abstract class AbstractServer {
             throwable.printStackTrace();
         }
     }
-    protected abstract void start() throws Throwable;
+    public abstract void start() throws Throwable;
 
-    protected abstract void stop() throws Throwable;
+    public abstract void stop() throws Throwable;
 
     public InetSocketAddress getBindAddress() {
         return bindAddress;

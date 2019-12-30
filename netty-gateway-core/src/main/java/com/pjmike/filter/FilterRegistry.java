@@ -19,10 +19,10 @@ import java.util.stream.Collectors;
  * @create: 2019/12/18
  */
 @Slf4j
-public class FilterUtils {
-    public static final FilterUtils INSTANCE = new FilterUtils();
+public class FilterRegistry {
+    public static final FilterRegistry INSTANCE = new FilterRegistry();
 
-    public FilterUtils getInstance() {
+    public FilterRegistry getInstance() {
         return INSTANCE;
     }
     public List<GatewayFilter> loadGlobalFilters() {

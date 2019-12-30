@@ -1,10 +1,9 @@
 package com.pjmike.handler;
 
+import com.pjmike.constants.CommonConstants;
 import com.pjmike.context.RequestContextUtil;
 import com.pjmike.execute.GatewayExecutor;
 import com.pjmike.execute.InitExecutor;
-import com.pjmike.filter.handle.FilterWebHandler;
-import com.pjmike.route.CompositeRouteLocator;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -29,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class DispatcherHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
-    private GatewayExecutor gatewayExecutor = (GatewayExecutor) InitExecutor.routeLocatorMap.get(GatewayExecutor.class.getName());
+    private GatewayExecutor gatewayExecutor = (GatewayExecutor) InitExecutor.gatewayConfig.get(CommonConstants.GATEWAY_EXECUTOR_NAME);
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest httpRequest) throws Exception {
         Channel channel = ctx.channel();

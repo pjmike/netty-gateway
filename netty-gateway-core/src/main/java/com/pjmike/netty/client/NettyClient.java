@@ -15,12 +15,14 @@ import io.netty.channel.pool.SimpleChannelPool;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.FutureListener;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @description: netty_proxy_client
  * @author: pjmike
  * @create: 2019/12/19
  */
+@Slf4j
 public class NettyClient {
     private final EventLoopGroup group = new NioEventLoopGroup(4*2);
     private final Bootstrap bootstrap = new Bootstrap();
@@ -45,12 +47,14 @@ public class NettyClient {
         Future<Channel> channelFuture = pool.acquire().sync();
         channelFuture.addListener((FutureListener<Channel>) future -> {
             if (future.isSuccess()) {
+                log.info("从Channel Pool 中获取Channel");
                 Channel clientChannel = future.getNow();
                 //clientChannel与原serverChannel进行绑定
                 clientChannel.attr(Attributes.SERVER_CHANNEL).set(serverChannel);
                 clientChannel.attr(Attributes.CLIENT_POOL).set(pool);
                 //写数据
-                clientChannel.writeAndFlush(httpRequest);
+                log.info("写出转发数据....");
+                clientChannel.writeAndFlush(httpRequest.getHttpRequest());
             }
         });
     }
