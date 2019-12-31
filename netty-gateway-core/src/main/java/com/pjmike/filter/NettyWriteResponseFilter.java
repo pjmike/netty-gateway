@@ -22,15 +22,13 @@ import java.nio.charset.Charset;
 public class NettyWriteResponseFilter implements GatewayFilter{
     @Override
     public void filter(Channel channel, GatewayFilterChain filterChain) {
-        log.info("开始执行netty write response filter");
         FullHttpResponse response = channel.attr(Attributes.RESPONSE).get();
+        log.info("response is {}", response.content().toString(CharsetUtil.UTF_8));
         if (response == null) {
-            //TODO
             log.info("response is null, because on the blocking");
             response = NettyHttpResponseUtil.getBlockResponse();
             log.info("temper response, {}",response.content().toString(CharsetUtil.UTF_8));
         }
         channel.writeAndFlush(response);
-        filterChain.filter(channel);
     }
 }

@@ -25,7 +25,7 @@ public class NettyServer {
     public NettyServer(Integer port) {
         this.port = port;
     }
-    public void start() throws Throwable {
+    public void start() {
         serverBootstrap = new ServerBootstrap();
         bossGroup = new NioEventLoopGroup(1, new DefaultThreadFactory("boss", true));
         workGroup = new NioEventLoopGroup(0, new DefaultThreadFactory("worker", true));
@@ -36,15 +36,12 @@ public class NettyServer {
                 .childOption(ChannelOption.TCP_NODELAY, Boolean.TRUE)
                 .childHandler(new HttpHandlerInitializer());
         //bind
-        ChannelFuture future = serverBootstrap.bind(port);
-        future.addListener(future1 -> {
+        serverBootstrap.bind(port).addListener(future1 -> {
             if (future1.isSuccess()) {
                 System.out.println("端口绑定成功");
             } else {
-                System.out.println("失败");
+                System.out.println("端口绑定失败");
             }
         });
-        //等待服务端Socket关闭
-        future.channel().closeFuture().sync();
     }
 }

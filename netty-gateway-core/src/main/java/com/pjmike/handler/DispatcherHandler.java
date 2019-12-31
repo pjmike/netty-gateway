@@ -35,9 +35,7 @@ public class DispatcherHandler extends SimpleChannelInboundHandler<FullHttpReque
         boolean keepAlive = HttpUtil.isKeepAlive(httpRequest);
         RequestContextUtil.setRequest(channel, httpRequest);
         RequestContextUtil.setKeepAlive(channel, keepAlive);
-        //TODO 执行GatewayExecutor的逻辑
-        //TODO 需要将FilterWebHandler和RouteLocator注入GatewayExecutor
-        // 执行HTTP转发请求，建议使用独立的线程池进行处理，加快响应速度
+        //执行HTTP转发请求
         gatewayExecutor.execute(channel);
     }
 }
