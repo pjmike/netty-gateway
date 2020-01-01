@@ -4,7 +4,9 @@ import com.pjmike.constants.CommonConstants;
 import com.pjmike.context.RequestContextUtil;
 import com.pjmike.execute.GatewayExecutor;
 import com.pjmike.execute.InitExecutor;
+import com.pjmike.http.NettyHttpResponseUtil;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
@@ -35,7 +37,14 @@ public class DispatcherHandler extends SimpleChannelInboundHandler<FullHttpReque
         boolean keepAlive = HttpUtil.isKeepAlive(httpRequest);
         RequestContextUtil.setRequest(channel, httpRequest);
         RequestContextUtil.setKeepAlive(channel, keepAlive);
-        //执行HTTP转发请求
+        //execute the http proxy request
         gatewayExecutor.execute(channel);
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        log.error("server catch exception",cause);
+        ctx.channel().writeAndFlush(NettyHttpResponseUtil.buildFailResponse(HttpResponseStatus.INTERNAL_SERVER_ERROR))
+                .addListener(ChannelFutureListener.CLOSE);
     }
 }

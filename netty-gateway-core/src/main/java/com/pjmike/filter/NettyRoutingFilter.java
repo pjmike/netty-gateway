@@ -2,17 +2,12 @@ package com.pjmike.filter;
 
 import com.pjmike.annotation.Order;
 import com.pjmike.attribute.Attributes;
-import com.pjmike.context.RequestContextUtil;
-import com.pjmike.execute.HttpClientExecutor;
-import com.pjmike.http.HttpRequestDecompose;
 import com.pjmike.http.NettyHttpRequest;
 import com.pjmike.http.NettyHttpRequestBuilder;
 import com.pjmike.netty.client.NettyClient;
 import com.pjmike.route.Route;
-import com.pjmike.utils.LockUtil;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.FullHttpRequest;
-import io.netty.handler.codec.http.FullHttpResponse;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -47,7 +42,6 @@ public class NettyRoutingFilter implements GatewayFilter{
             channel.attr(Attributes.NETTY_PROXY_HTTP_REQUEST).set(nettyHttpRequest);
             //TODO 下一步转发请求
             NettyClient.INSTANCE.request(nettyHttpRequest,channel);
-            LockUtil.countdownlatch.await();
         } catch (Exception e) {
             log.warn("build nettyHttpRequest failed, {}", e.getCause());
             e.printStackTrace();

@@ -41,7 +41,7 @@ public class AnnotationRouteLocator extends AbstractRouteLocator {
                 }
             }
         } catch (Exception e) {
-            log.warn("load user-defined route failed, ", e);
+            log.warn("load user-defined route failed, {}", e);
             e.printStackTrace();
         }
         return routes;
