@@ -10,6 +10,7 @@ import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
+import io.netty.handler.timeout.ReadTimeoutException;
 import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,5 +44,15 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<FullHttpResp
         FullHttpResponse response = NettyHttpResponseUtil.buildSuccessResponse(serverChannel, msg);
         serverChannel.attr(Attributes.RESPONSE).set(response);
         clientChannel.attr(Attributes.CLIENT_POOL).get().release(clientChannel);
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        if (cause instanceof ReadTimeoutException) {
+            log.warn("read time out");
+            //TODO do something
+        }  else {
+            //TODO
+        }
     }
 }

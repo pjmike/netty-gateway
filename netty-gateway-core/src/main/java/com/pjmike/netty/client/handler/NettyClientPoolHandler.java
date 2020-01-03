@@ -5,6 +5,8 @@ import io.netty.channel.pool.ChannelPoolHandler;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
 import io.netty.handler.codec.http.HttpObjectAggregator;
+import io.netty.handler.timeout.ReadTimeoutHandler;
+import io.netty.handler.timeout.WriteTimeoutHandler;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -33,6 +35,8 @@ public class NettyClientPoolHandler implements ChannelPoolHandler {
         socketChannel.pipeline()
                 .addLast(new HttpClientCodec())
                 .addLast(new HttpObjectAggregator(1024))
+                .addLast("ReadTimeoutHandler",new ReadTimeoutHandler(30))
+                .addLast("WriteTimeoutHandler",new WriteTimeoutHandler(5))
                 .addLast(new NettyClientHandler());
     }
 }
