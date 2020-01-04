@@ -34,5 +34,8 @@ public class CommonConstants {
     public static final String GLOBAL_FILTER_NAME = "global_filter_name";
 
 
-
+    /**
+     * ---------------------------公共锁------------------------------
+     **/
+    public static final Object OBJECT = new Object();
 }

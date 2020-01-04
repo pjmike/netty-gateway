@@ -44,7 +44,7 @@ public class DispatcherHandler extends SimpleChannelInboundHandler<FullHttpReque
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         log.error("server catch exception",cause);
-        ctx.channel().writeAndFlush(NettyHttpResponseUtil.buildFailResponse(HttpResponseStatus.INTERNAL_SERVER_ERROR))
+        ctx.channel().writeAndFlush(NettyHttpResponseUtil.buildFailResponse(cause.getMessage()))
                 .addListener(ChannelFutureListener.CLOSE);
     }
 }
