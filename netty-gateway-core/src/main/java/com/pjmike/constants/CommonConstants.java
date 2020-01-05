@@ -20,7 +20,7 @@ public class CommonConstants {
     public static final String FILTER_SCAN_PACKAGE = "com.pjmike.filter";
 
 
-    /** ---------------------------HTTP------------------------------**/
+    /** ---------------------------HTTP & HTTPS------------------------------**/
     public static final String HTTP = "HTTP";
 
     public static final String HTTPS = "HTTPS";

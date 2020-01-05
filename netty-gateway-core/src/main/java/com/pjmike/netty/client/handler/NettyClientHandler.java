@@ -38,6 +38,7 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<FullHttpResp
         Channel clientChannel = ctx.channel();
         //write response
         FullHttpResponse response = NettyHttpResponseUtil.buildSuccessResponse(msg);
+        System.err.println("refCnt1: "+response.refCnt());
         setResponse(clientChannel,response);
 
         clientChannel.attr(Attributes.CLIENT_POOL).get().release(clientChannel);

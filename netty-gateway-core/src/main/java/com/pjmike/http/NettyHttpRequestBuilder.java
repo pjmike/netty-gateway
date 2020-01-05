@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 
 import java.net.URI;
-import java.net.URL;
+import java.net.URISyntaxException;
 import java.util.*;
 
 /**
@@ -20,62 +20,64 @@ import java.util.*;
  */
 @Slf4j
 public class NettyHttpRequestBuilder {
-    private HttpRequest newRequest;
+    private FullHttpRequest newRequest;
+    private FullHttpRequest nativeRequest;
     private Route route;
 
     public NettyHttpRequest buildHttpRequest(final FullHttpRequest nativeRequest, final Route route) throws Exception {
-        this.route = route;
-        URL url = getURL();
-        log.info("proxy_url is {}", url.toString());
-        //请求路径
-        QueryStringEncoder queryStringEncoder = new QueryStringEncoder(url.getPath());
-        newRequest = new DefaultFullHttpRequest(nativeRequest.protocolVersion(), nativeRequest.method(), url.toString());
-        //将原URL中的请求参数提取出来，放入新的URL中
-        buildNewRequestParams(queryStringEncoder);
+        setFields(nativeRequest, route);
+        URI uri = route.getUri();
+        log.info("proxy_url is {}", uri.toString());
+        QueryStringEncoder queryStringEncoder = buildNewRequestParams(uri.toString(), nativeRequest);
+        newRequest = new DefaultFullHttpRequest(nativeRequest.protocolVersion(), nativeRequest.method(), queryStringEncoder.toUri().toASCIIString());
 
         //将原URL中的请求头提取出来，放入新的URL中
-        buildNewRequestHeader(nativeRequest);
-
+        buildNewRequestHeader();
         //设置长连接
         HttpUtil.setKeepAlive(newRequest, true);
-
         //设置请求体
-        buildBody(nativeRequest);
-
+        buildBody();
         //返回封装结果
-        return new NettyHttpRequest(route, url, newRequest);
+        return new NettyHttpRequest(route, uri, newRequest);
     }
 
-    private URL getURL() throws Exception{
-        return route.getUri().toURL();
+    private void setFields(FullHttpRequest nativeRequest,Route route) {
+        this.route = route;
+        this.nativeRequest = nativeRequest;
     }
-
     /**
      * 构建转发请求的请求头
      *
-     * @param nativeRequest
      */
-    private void buildNewRequestHeader(HttpRequest nativeRequest) throws Exception{
+    private void buildNewRequestHeader() {
         HttpHeaders headers = nativeRequest.headers();
         headers.remove(HttpHeaderNames.COOKIE);
-        headers.set(HttpHeaderNames.HOST, getURL().getHost());
+        headers.set(HttpHeaderNames.HOST, route.getUri().getHost());
         newRequest.headers().set(headers);
     }
 
     /**
-     * 构建转发请求的参数
-     *
-     * @param queryStringEncoder
+     * build new uri
+     * @param newUri
+     * @param nativeRequest
      */
-    private void buildNewRequestParams(QueryStringEncoder queryStringEncoder) {
-        QueryStringDecoder queryStringDecoder = new QueryStringDecoder(newRequest.uri());
-        Map<String, List<String>> parameters = queryStringDecoder.parameters();
-        parameters.forEach((key, values) -> values.forEach(value -> {
-            queryStringEncoder.addParam(key, value);
-        }));
+    private QueryStringEncoder buildNewRequestParams(String newUri,FullHttpRequest nativeRequest) {
+        try {
+            URI nativeUri = new URI(nativeRequest.uri());
+            newUri = newUri + nativeUri.getPath();
+            QueryStringEncoder queryStringEncoder = new QueryStringEncoder(newUri);
+            QueryStringDecoder queryStringDecoder = new QueryStringDecoder(nativeRequest.uri());
+            Map<String, List<String>> parameters = queryStringDecoder.parameters();
+            parameters.forEach((key, values) -> values.forEach(value -> {
+                queryStringEncoder.addParam(key, value);
+            }));
+            return queryStringEncoder;
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            throw new RuntimeException("system error");
+        }
     }
-
-    private void buildBody(FullHttpRequest nativeRequest) throws Exception {
+    private void buildBody() throws Exception {
         String contentType = getContentType();
         if (StringUtils.isEmpty(contentType)) {
             //TODO
@@ -84,7 +86,7 @@ public class NettyHttpRequestBuilder {
         ByteBuf content = nativeRequest.content();
         if (HttpHeaderValues.APPLICATION_JSON.toString().equals(contentType)) {
             newRequest.headers().set(HttpHeaderNames.CONTENT_LENGTH, content.readableBytes());
-            ((FullHttpRequest) newRequest).content().writeBytes(content);
+            newRequest.content().writeBytes(content);
         } else if (HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED.toString().equals(contentType)) {
             HttpPostRequestEncoder requestEncoder = new HttpPostRequestEncoder(newRequest, false);
             QueryStringDecoder queryStringDecoder = new QueryStringDecoder(nativeRequest.content().toString(CharsetUtil.UTF_8));
@@ -96,12 +98,12 @@ public class NettyHttpRequestBuilder {
                     e.printStackTrace();
                 }
             }));
-            newRequest = requestEncoder.finalizeRequest();
+            newRequest = (FullHttpRequest) requestEncoder.finalizeRequest();
         } else if (HttpHeaderValues.MULTIPART_FORM_DATA.toString().equals(contentType)) {
             //TODO
         } else {
             newRequest.headers().set(HttpHeaderNames.CONTENT_LENGTH, content.readableBytes());
-            ((FullHttpRequest) newRequest).content().writeBytes(content);
+            newRequest.content().writeBytes(content);
         }
     }
 

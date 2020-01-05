@@ -6,6 +6,8 @@ import io.netty.handler.codec.http.HttpRequest;
 import org.apache.http.client.methods.HttpUriRequest;
 
 import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.Objects;
 
@@ -25,12 +27,12 @@ import static com.pjmike.constants.CommonConstants.HTTPS;
  */
 public class NettyHttpRequest {
     private Route route;
-    private URL url;
+    private URI uri;
     private HttpRequest httpRequest;
 
-    public NettyHttpRequest(Route route, URL url, HttpRequest httpRequest) {
+    public NettyHttpRequest(Route route, URI uri, HttpRequest httpRequest) {
         this.route = route;
-        this.url = url;
+        this.uri = uri;
         this.httpRequest = httpRequest;
     }
 
@@ -40,10 +42,10 @@ public class NettyHttpRequest {
      * @return
      */
     public String getHost() {
-        if (url.getHost() == null) {
+        if (uri.getHost() == null) {
             throw new RuntimeException("no host found");
         }
-        return url.getHost();
+        return uri.getHost();
     }
 
     /**
@@ -53,6 +55,12 @@ public class NettyHttpRequest {
      * @return
      */
     public int getPort() {
+        URL url = null;
+        try {
+            url = uri.toURL();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
         String protocol = url.getProtocol() == null ? HTTP : url.getProtocol();
         int port = url.getPort();
         if (port == -1) {
@@ -74,22 +82,4 @@ public class NettyHttpRequest {
         return this.httpRequest;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        NettyHttpRequest that = (NettyHttpRequest) o;
-        return Objects.equals(route, that.route) &&
-                Objects.equals(url, that.url) &&
-                Objects.equals(httpRequest, that.httpRequest);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(route, url, httpRequest);
-    }
 }
