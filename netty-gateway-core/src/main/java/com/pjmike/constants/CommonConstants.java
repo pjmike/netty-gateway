@@ -38,4 +38,8 @@ public class CommonConstants {
      * ---------------------------公共锁------------------------------
      **/
     public static final Object OBJECT = new Object();
+    /**
+     * 令牌桶算法：Guava的RateLimiter每秒发出的令牌数
+     */
+    public static final Integer PERMIT_SPER_SECOND = 10;
 }
