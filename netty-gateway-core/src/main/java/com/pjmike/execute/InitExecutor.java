@@ -1,6 +1,10 @@
 package com.pjmike.execute;
 
+import com.alibaba.csp.sentinel.slots.block.RuleConstant;
+import com.alibaba.csp.sentinel.slots.block.degrade.DegradeRule;
+import com.alibaba.csp.sentinel.slots.block.degrade.DegradeRuleManager;
 import com.pjmike.constants.CommonConstants;
+import com.pjmike.constants.SentinelConstants;
 import com.pjmike.filter.FilterRegistry;
 import com.pjmike.filter.GatewayFilter;
 import com.pjmike.filter.handle.FilterWebHandler;
@@ -46,5 +50,18 @@ public class InitExecutor {
 
     public static List<GatewayFilter> getAllGlobalFilters() {
         return FilterRegistry.INSTANCE.loadGlobalFilters();
+    }
+
+    public static void initDegradeRule() {
+        List<DegradeRule> rules = new ArrayList<>();
+        DegradeRule rule = new DegradeRule();
+        rule.setResource(SentinelConstants.KEY);
+        // set limit exception ratio to 0.1
+        rule.setCount(0.1);
+        rule.setGrade(RuleConstant.DEGRADE_GRADE_EXCEPTION_RATIO);
+        rule.setTimeWindow(10);
+        rule.setMinRequestAmount(20);
+        rules.add(rule);
+        DegradeRuleManager.loadRules(rules);
     }
 }
