@@ -17,8 +17,8 @@ public class RouteConfig {
     public Route buildRoute() throws URISyntaxException {
         return Route.builder()
                 .id("route_1")
-                .uri(new URI("http://localhost:8888/"))
-                .predicate(PredicateUtils.path("/path/**"))
+                .uri(new URI("http://localhost:8089"))
+                .predicate(PredicateUtils.path("/"))
                 .build();
     }
 }

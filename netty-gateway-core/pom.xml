@@ -46,7 +46,7 @@
         <dependency>
             <groupId>com.alibaba.csp</groupId>
             <artifactId>sentinel-annotation-aspectj</artifactId>
-            <version>1.4.1</version>
+            <version>1.6.3</version>
         </dependency>
     </dependencies>
 

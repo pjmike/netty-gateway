@@ -17,7 +17,7 @@ public class GatewayFilterChain {
         this.filters = filters;
     }
 
-    public void filter(Channel channel) {
+    public void filter(Channel channel) throws Exception {
         //TODO
         if (this.index < filters.size()) {
             GatewayFilter filter = filters.get(index++);

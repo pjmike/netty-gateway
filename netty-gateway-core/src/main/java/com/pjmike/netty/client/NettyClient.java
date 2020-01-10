@@ -17,6 +17,7 @@ import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.FutureListener;
 import lombok.extern.slf4j.Slf4j;
 
+
 /**
  * @description: netty_proxy_client
  * @author: pjmike
@@ -24,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class NettyClient {
-    private final EventLoopGroup group = new NioEventLoopGroup(4*2);
+    private final EventLoopGroup group = new NioEventLoopGroup(4 * 2);
     private final Bootstrap bootstrap = new Bootstrap();
     private ChannelPoolMap<NettyHttpRequest, SimpleChannelPool> channelPoolMap;
     public static final NettyClient INSTANCE = new NettyClient();
@@ -42,18 +43,22 @@ public class NettyClient {
         };
     }
 
-    public synchronized void request(final NettyHttpRequest httpRequest, final Channel serverChannel) throws InterruptedException {
+    public void request(final NettyHttpRequest httpRequest, final Channel serverChannel) {
         SimpleChannelPool pool = channelPoolMap.get(httpRequest);
-        Future<Channel> channelFuture = pool.acquire().sync();
+        Future<Channel> channelFuture;
+        try {
+            channelFuture = pool.acquire().sync();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return;
+        }
         channelFuture.addListener((FutureListener<Channel>) future -> {
             if (future.isSuccess()) {
-                log.info("从Channel Pool 中获取Channel");
                 Channel clientChannel = future.getNow();
                 //clientChannel与原serverChannel进行绑定
                 clientChannel.attr(Attributes.SERVER_CHANNEL).set(serverChannel);
                 clientChannel.attr(Attributes.CLIENT_POOL).set(pool);
                 //写数据
-                log.info("写出转发数据....");
                 clientChannel.writeAndFlush(httpRequest.getHttpRequest());
             }
         });
