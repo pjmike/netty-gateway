@@ -12,6 +12,7 @@ import lombok.Data;
 public class PredicateDefinition {
 
     private String value;
+
     public PredicateDefinition() {
     }
 
