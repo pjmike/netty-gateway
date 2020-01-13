@@ -21,7 +21,7 @@ public class FilterWebHandler implements WebHandler {
         return INSTANCE;
     }
     @Override
-    public void handle(Channel channel) {
+    public void handle(Channel channel) throws Exception {
         Route route = channel.attr(Attributes.GATEWAY_ROUTE_ATTR).get();
         List<GatewayFilter> gatewayFilters = route.getGatewayFilters();
 
