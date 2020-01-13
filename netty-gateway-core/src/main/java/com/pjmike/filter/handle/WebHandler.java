@@ -13,5 +13,5 @@ public interface WebHandler {
      *
      * @param channel
      */
-    void handle(Channel channel);
+    void handle(Channel channel) throws Exception;
 }
