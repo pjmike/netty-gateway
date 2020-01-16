@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author: pjmike
  * @create: 2019/11/29
  */
-@Order(2)
+@Order(50)
 @Slf4j
 public class NettyRoutingFilter implements GatewayFilter {
     private NettyHttpRequest nettyHttpRequest;

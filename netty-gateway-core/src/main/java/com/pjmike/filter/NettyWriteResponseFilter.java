@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author: pjmike
  * @create: 2019/11/29
  */
-@Order(3)
+@Order(100)
 @Slf4j
 public class NettyWriteResponseFilter implements GatewayFilter {
     @Override
