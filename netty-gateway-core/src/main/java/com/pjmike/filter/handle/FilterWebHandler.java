@@ -1,6 +1,7 @@
 package com.pjmike.filter.handle;
 
 import com.pjmike.attribute.Attributes;
+import com.pjmike.context.RequestContextUtil;
 import com.pjmike.filter.GatewayFilter;
 import com.pjmike.filter.GatewayFilterChain;
 import com.pjmike.filter.handle.WebHandler;
@@ -22,7 +23,7 @@ public class FilterWebHandler implements WebHandler {
     }
     @Override
     public void handle(Channel channel) throws Exception {
-        Route route = channel.attr(Attributes.GATEWAY_ROUTE_ATTR).get();
+        Route route = RequestContextUtil.getRoute(channel);
         List<GatewayFilter> gatewayFilters = route.getGatewayFilters();
 
         GatewayFilterChain filterChain = new GatewayFilterChain(gatewayFilters);

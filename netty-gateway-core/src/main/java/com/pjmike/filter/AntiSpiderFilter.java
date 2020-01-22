@@ -50,7 +50,7 @@ public class AntiSpiderFilter implements GatewayFilter{
         RateLimiter rateLimiter = limiterCache.get(clientIp);
         if (!rateLimiter.tryAcquire()) {
             //TODO 自定义Exception抛出
-            throw new RuntimeException("IP请求次数每秒不能超过2");
+            throw new RuntimeException("1s内IP请求次数不能超过2");
         }
         filterChain.filter(channel);
     }

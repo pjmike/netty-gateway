@@ -18,7 +18,6 @@ public class GatewayFilterChain {
     }
 
     public void filter(Channel channel) throws Exception {
-        //TODO
         if (this.index < filters.size()) {
             GatewayFilter filter = filters.get(index++);
             filter.filter(channel,this);

@@ -1,6 +1,6 @@
 package com.pjmike.execute;
 
-import com.pjmike.constants.CommonConstants;
+import com.pjmike.context.ApplicationContext;
 import com.pjmike.context.RequestContextUtil;
 import com.pjmike.filter.GatewayFilter;
 import com.pjmike.filter.handle.WebHandler;
@@ -19,13 +19,14 @@ import java.util.Objects;
 public class GatewayExecutor extends AbstractExecutor<Void> {
     private RouteLocator routeLocator;
     private WebHandler webHandler;
-    public GatewayExecutor(RouteLocator routeLocator, WebHandler webHandler) {
+    private List<GatewayFilter> filterList;
+    public GatewayExecutor(RouteLocator routeLocator, WebHandler webHandler,List<GatewayFilter> gatewayFilters) {
         this.routeLocator = routeLocator;
         this.webHandler = webHandler;
+        this.filterList = gatewayFilters;
     }
     @Override
     protected Void doExecute(Object... args) throws Exception {
-        final List<GatewayFilter> filterList = (List<GatewayFilter>) InitExecutor.gatewayConfig.get(CommonConstants.GLOBAL_FILTER_NAME);
         Channel channel = (Channel)args[0];
         //find route
         Route route = routeLocator.lookupRoute(channel);

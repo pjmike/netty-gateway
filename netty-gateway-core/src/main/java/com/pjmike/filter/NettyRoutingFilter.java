@@ -2,6 +2,7 @@ package com.pjmike.filter;
 
 import com.pjmike.annotation.Order;
 import com.pjmike.attribute.Attributes;
+import com.pjmike.context.RequestContextUtil;
 import com.pjmike.http.NettyHttpRequest;
 import com.pjmike.http.NettyHttpRequestBuilder;
 import com.pjmike.netty.client.NettyClient;
@@ -35,15 +36,15 @@ import lombok.extern.slf4j.Slf4j;
 public class NettyRoutingFilter implements GatewayFilter {
     private NettyHttpRequest nettyHttpRequest;
     private static NettyHttpRequestBuilder requestBuilder = new NettyHttpRequestBuilder();
-
     @Override
     public void filter(Channel channel, GatewayFilterChain chain) throws Exception {
-        FullHttpRequest httpRequest = channel.attr(Attributes.REQUEST).get();
-        Route route = channel.attr(Attributes.GATEWAY_ROUTE_ATTR).get();
+        FullHttpRequest httpRequest = RequestContextUtil.getRequest(channel);
+        Route route = RequestContextUtil.getRoute(channel);
+
         nettyHttpRequest = requestBuilder.buildHttpRequest(httpRequest, route);
-        channel.attr(Attributes.NETTY_PROXY_HTTP_REQUEST).set(nettyHttpRequest);
-        //TODO 下一步转发请求
-        NettyClient.INSTANCE.request(nettyHttpRequest, channel);
+        RequestContextUtil.setNettyHttpRequest(channel,nettyHttpRequest);
+
+        NettyClient.getInstance().request(nettyHttpRequest, channel);
         chain.filter(channel);
     }
 }

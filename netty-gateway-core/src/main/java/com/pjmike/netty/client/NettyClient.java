@@ -28,8 +28,10 @@ public class NettyClient {
     private final EventLoopGroup group = new NioEventLoopGroup(4 * 2);
     private final Bootstrap bootstrap = new Bootstrap();
     private ChannelPoolMap<NettyHttpRequest, SimpleChannelPool> channelPoolMap;
-    public static final NettyClient INSTANCE = new NettyClient();
-
+    private static NettyClient instance = new NettyClient();
+    public static NettyClient getInstance() {
+        return instance;
+    }
     public NettyClient() {
         bootstrap.group(group)
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 500)
@@ -43,22 +45,16 @@ public class NettyClient {
         };
     }
 
-    public void request(final NettyHttpRequest httpRequest, final Channel serverChannel) {
+    public void request(final NettyHttpRequest httpRequest, final Channel serverChannel) throws InterruptedException {
         SimpleChannelPool pool = channelPoolMap.get(httpRequest);
-        Future<Channel> channelFuture;
-        try {
-            channelFuture = pool.acquire().sync();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return;
-        }
+        Future<Channel> channelFuture = pool.acquire().sync();
         channelFuture.addListener((FutureListener<Channel>) future -> {
             if (future.isSuccess()) {
                 Channel clientChannel = future.getNow();
-                //clientChannel与原serverChannel进行绑定
+                //clientChannel bind with serverChannel
                 clientChannel.attr(Attributes.SERVER_CHANNEL).set(serverChannel);
                 clientChannel.attr(Attributes.CLIENT_POOL).set(pool);
-                //写数据
+                //write data
                 clientChannel.writeAndFlush(httpRequest.getHttpRequest());
             }
         });

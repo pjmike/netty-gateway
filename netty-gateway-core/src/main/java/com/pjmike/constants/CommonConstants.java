@@ -25,18 +25,8 @@ public class CommonConstants {
 
     public static final String HTTPS = "HTTPS";
 
-    /**
-     * ---------------------------GatewayConfig的Key----------------------
-     **/
 
-    public static final String GATEWAY_EXECUTOR_NAME = "gateway_executor";
-
-    public static final String GLOBAL_FILTER_NAME = "global_filter_name";
-
-
-    /**
-     * ---------------------------公共锁------------------------------
-     **/
+    /**---------------------------公共锁-------------------------------------**/
     public static final Object OBJECT = new Object();
     /**
      * 令牌桶算法：Guava的RateLimiter每秒发出的令牌数

@@ -20,10 +20,10 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public class FilterRegistry {
-    public static final FilterRegistry INSTANCE = new FilterRegistry();
+    private static FilterRegistry instance = new FilterRegistry();
 
-    public FilterRegistry getInstance() {
-        return INSTANCE;
+    public static FilterRegistry getInstance() {
+        return instance;
     }
     public List<GatewayFilter> loadGlobalFilters() {
         List<GatewayFilter> gatewayFilters = new ArrayList<>();
