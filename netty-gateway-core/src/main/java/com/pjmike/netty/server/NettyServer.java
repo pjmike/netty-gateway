@@ -47,4 +47,17 @@ public class NettyServer {
             log.warn("server start failed",e);
         }
     }
+
+    public void shutdown() {
+        try {
+            if (this.bossGroup != null) {
+                this.bossGroup.shutdownGracefully();
+            }
+            if (this.workGroup != null) {
+                this.workGroup.shutdownGracefully();
+            }
+        } catch (Exception e) {
+            log.error("NettyServer shutdown exception, {}", e);
+        }
+    }
 }

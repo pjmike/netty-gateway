@@ -13,6 +13,9 @@ public class ServerBootStrap {
             server.start();
         } catch (Throwable throwable) {
             throwable.printStackTrace();
+            System.exit(-1);
         }
+        //钩子函数
+        Runtime.getRuntime().addShutdownHook(new Thread(server::shutdown));
     }
 }

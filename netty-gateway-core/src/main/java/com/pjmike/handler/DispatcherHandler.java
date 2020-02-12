@@ -1,7 +1,8 @@
 package com.pjmike.handler;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.pjmike.context.ApplicationContext;
-import com.pjmike.context.RequestContextUtil;
+import com.pjmike.context.ChannelContextUtil;
 import com.pjmike.http.NettyHttpResponseUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
@@ -9,6 +10,10 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -28,12 +33,13 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class DispatcherHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest httpRequest) throws Exception {
         Channel channel = ctx.channel();
         boolean keepAlive = HttpUtil.isKeepAlive(httpRequest);
-        RequestContextUtil.setRequest(channel, httpRequest);
-        RequestContextUtil.setKeepAlive(channel, keepAlive);
+        ChannelContextUtil.setRequest(channel, httpRequest);
+        ChannelContextUtil.setKeepAlive(channel, keepAlive);
         //execute the http proxy request
         ApplicationContext.getInstance().getGatewayExecutor().execute(channel);
     }
