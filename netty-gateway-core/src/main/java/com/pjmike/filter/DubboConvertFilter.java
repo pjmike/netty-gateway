@@ -14,6 +14,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
+
 /**
  * @description: 协议转换 HTTP -> Dubbo
  * @author: pjmike
@@ -26,6 +27,7 @@ public class DubboConvertFilter implements GatewayFilter{
         FullHttpRequest request = ChannelContextUtil.getRequest(channel);
         URI route_uri = ChannelContextUtil.getRoute(channel).getUri();
         String scheme = route_uri.getScheme();
+
         if ("http".equals(scheme) || "https".equals(scheme)) {
             filterChain.filter(channel);
             return;

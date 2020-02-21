@@ -29,4 +29,5 @@ public class RouteConfig {
                 .uri(new URI("dubbo://127.0.0.1:20880/org.apache.dubbo.demo.DemoService"))
                 .build();
     }
+
 }

@@ -2,6 +2,7 @@ package com.pjmike.netty.client;
 
 import com.pjmike.attribute.Attributes;
 import com.pjmike.http.NettyClientHttpRequest;
+
 import com.pjmike.netty.client.handler.NettyClientPoolHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -28,6 +29,7 @@ public class NettyClient {
     private final EventLoopGroup group = new NioEventLoopGroup(4 * 2);
     private final Bootstrap bootstrap = new Bootstrap();
     private ChannelPoolMap<NettyClientHttpRequest, SimpleChannelPool> channelPoolMap;
+
     private static NettyClient instance = new NettyClient();
     public static NettyClient getInstance() {
         return instance;
@@ -40,12 +42,14 @@ public class NettyClient {
         channelPoolMap = new AbstractChannelPoolMap<NettyClientHttpRequest, SimpleChannelPool>() {
             @Override
             protected SimpleChannelPool newPool(NettyClientHttpRequest key) {
+
                 return new FixedChannelPool(bootstrap.remoteAddress(key.getSocketAddress()), new NettyClientPoolHandler(), 50);
             }
         };
     }
 
     public void request(final NettyClientHttpRequest httpRequest, final Channel serverChannel) throws InterruptedException {
+
         SimpleChannelPool pool = channelPoolMap.get(httpRequest);
         Future<Channel> channelFuture = pool.acquire().sync();
         channelFuture.addListener((FutureListener<Channel>) future -> {

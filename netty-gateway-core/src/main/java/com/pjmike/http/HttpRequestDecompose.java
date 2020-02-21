@@ -46,6 +46,7 @@ public class HttpRequestDecompose {
         } else if (Objects.equals(HttpMethod.POST, method)) {
             FullHttpRequest fullHttpRequest = (FullHttpRequest) httpRequest;
             paramMap = getPostParamMap(fullHttpRequest);
+
         }
         return paramMap;
     }
