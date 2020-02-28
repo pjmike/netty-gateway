@@ -15,19 +15,12 @@ public class CommonConstants {
 
     public static final String PROPERTIES_ROUTE_PREDICATE_PATH = "netty.gateway.routes.predicates.path";
 
-    /** ---------------------------文件路径------------------------------**/
-
-    public static final String FILTER_SCAN_PACKAGE = "com.pjmike.filter";
-
-
     /** ---------------------------HTTP & HTTPS------------------------------**/
     public static final String HTTP = "HTTP";
 
     public static final String HTTPS = "HTTPS";
 
 
-    /**---------------------------公共锁-------------------------------------**/
-    public static final Object OBJECT = new Object();
     /**
      * 令牌桶算法：Guava的RateLimiter每秒发出的令牌数
      */

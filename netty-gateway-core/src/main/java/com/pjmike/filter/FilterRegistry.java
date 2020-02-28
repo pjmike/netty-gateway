@@ -5,7 +5,7 @@ import com.pjmike.filter.post.NettyWriteResponseFilter;
 import com.pjmike.filter.pre.AntiSpiderFilter;
 import com.pjmike.filter.pre.RateLimitFilter;
 import com.pjmike.filter.route.NettyRoutingFilter;
-import com.pjmike.filter.route.SentinelFilter;
+import com.pjmike.filter.pre.SentinelFilter;
 import lombok.extern.slf4j.Slf4j;
 
 

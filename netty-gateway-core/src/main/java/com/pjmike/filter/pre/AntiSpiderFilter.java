@@ -5,9 +5,11 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.util.concurrent.RateLimiter;
 import com.pjmike.attribute.Attributes;
+import com.pjmike.exception.GatewayException;
 import com.pjmike.filter.GlobalFilter;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.HttpResponseStatus;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
@@ -59,8 +61,7 @@ public class AntiSpiderFilter extends GlobalFilter {
         // limit clientIp
         RateLimiter rateLimiter = limiterCache.get(clientIp);
         if (!rateLimiter.tryAcquire()) {
-            //TODO 自定义Exception抛出
-            throw new RuntimeException("1s内IP请求次数不能超过2");
+            throw new GatewayException(HttpResponseStatus.INTERNAL_SERVER_ERROR,"同一IP访问次数1s内不能超过2次");
         }
     }
 
