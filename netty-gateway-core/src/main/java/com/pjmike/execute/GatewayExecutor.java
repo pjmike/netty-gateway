@@ -1,13 +1,13 @@
 package com.pjmike.execute;
 
 import com.pjmike.context.ChannelContextUtil;
-import com.pjmike.filter.GatewayFilter;
+import com.pjmike.exception.GatewayException;
 import com.pjmike.filter.handle.WebHandler;
 import com.pjmike.route.Route;
 import com.pjmike.route.RouteLocator;
 import io.netty.channel.Channel;
+import io.netty.handler.codec.http.HttpResponseStatus;
 
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -18,26 +18,22 @@ import java.util.Objects;
 public class GatewayExecutor extends AbstractExecutor<Void> {
     private RouteLocator routeLocator;
     private WebHandler webHandler;
-    private List<GatewayFilter> filterList;
-    public GatewayExecutor(RouteLocator routeLocator, WebHandler webHandler,List<GatewayFilter> gatewayFilters) {
+    public GatewayExecutor(RouteLocator routeLocator, WebHandler webHandler) {
         this.routeLocator = routeLocator;
         this.webHandler = webHandler;
-        this.filterList = gatewayFilters;
     }
     @Override
     protected Void doExecute(Object... args) throws Exception {
         Channel channel = (Channel)args[0];
         //find route
-        Route route = routeLocator.lookupRoute(channel);
+        Route route = this.routeLocator.lookupRoute(channel);
         if (Objects.isNull(route)) {
-            throw new RuntimeException("no available route");
+            throw new GatewayException(HttpResponseStatus.NOT_FOUND,"no available route");
         }
-        //set filter
-        route.setGatewayFilters(filterList);
         //bind channel and route
         ChannelContextUtil.setRoute(channel,route);
-        // execute filter chain
-        webHandler.handle(channel);
+        // execute filter
+        this.webHandler.handle(channel);
         return null;
     }
 }

@@ -1,9 +1,8 @@
 package com.pjmike.context;
 
-import com.google.common.collect.Maps;
 import com.pjmike.execute.GatewayExecutor;
 import com.pjmike.filter.FilterRegistry;
-import com.pjmike.filter.GatewayFilter;
+import com.pjmike.filter.AbstractFilter;
 import com.pjmike.filter.handle.FilterWebHandler;
 import com.pjmike.route.*;
 import lombok.Data;
@@ -20,21 +19,19 @@ import java.util.List;
 public class ApplicationContext {
     private GatewayExecutor gatewayExecutor;
     private CompositeRouteLocator compositeRouteLocator;
-    private List<GatewayFilter> gatewayFilters;
 
     public void initializeBean() {
-        compositeRouteLocator = initRouteLocator();
-        gatewayFilters = getAllGlobalFilters();
-        gatewayExecutor = new GatewayExecutor(compositeRouteLocator, FilterWebHandler.getInstance(),gatewayFilters);
+        this.compositeRouteLocator = initRouteLocator();
+        this.gatewayExecutor = new GatewayExecutor(this.compositeRouteLocator, FilterWebHandler.getInstance());
     }
 
-    private static final ApplicationContext instance = new ApplicationContext();
+    private static final ApplicationContext INSTANCE = new ApplicationContext();
 
     public ApplicationContext() {
         initializeBean();
     }
     public static ApplicationContext getInstance() {
-        return instance;
+        return INSTANCE;
     }
     public CompositeRouteLocator initRouteLocator() {
         List<RouteLocator> routeLocators = new ArrayList<>();
@@ -43,8 +40,5 @@ public class ApplicationContext {
         routeLocators.add(new AnnotationRouteLocator());
         CompositeRouteLocator compositeRouteLocator = new CompositeRouteLocator(routeLocators);
         return compositeRouteLocator;
-    }
-    public List<GatewayFilter> getAllGlobalFilters() {
-        return FilterRegistry.getInstance().loadGlobalFilters();
     }
 }

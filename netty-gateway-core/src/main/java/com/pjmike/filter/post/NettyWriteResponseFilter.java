@@ -1,8 +1,8 @@
-package com.pjmike.filter;
+package com.pjmike.filter.post;
 
-import com.pjmike.annotation.Order;
 import com.pjmike.attribute.Attributes;
-import com.pjmike.constants.CommonConstants;
+import com.pjmike.context.ChannelContextUtil;
+import com.pjmike.filter.GlobalFilter;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.handler.codec.http.FullHttpResponse;
@@ -16,38 +16,27 @@ import lombok.extern.slf4j.Slf4j;
  * @author: pjmike
  * @create: 2019/11/29
  */
-@Order(100)
 @Slf4j
-public class NettyWriteResponseFilter implements GatewayFilter {
+public class NettyWriteResponseFilter extends GlobalFilter {
+
     @Override
-    public void filter(Channel channel, GatewayFilterChain filterChain) {
+    public String filterType() {
+        return "post";
+    }
+
+    @Override
+    public int filterOrder() {
+        return 100;
+    }
+    @Override
+    public void filter(Channel channel) {
         log.info("serverChannel id : {} ",channel.id());
-        FullHttpResponse response = getResponse(channel);
+        FullHttpResponse response = ChannelContextUtil.getResponse(channel);
         buildHeaders(response, channel);
         channel.writeAndFlush(response)
                 .addListener(ChannelFutureListener.CLOSE);
 
     }
-
-    /**
-     * 消费者同步等待获取响应数据
-     *
-     * @param channel
-     * @return
-     */
-    private FullHttpResponse getResponse(Channel channel) {
-        synchronized (CommonConstants.OBJECT) {
-            while (channel.attr(Attributes.RESPONSE).get() == null) {
-                try {
-                    CommonConstants.OBJECT.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            return channel.attr(Attributes.RESPONSE).get();
-        }
-    }
-
     /**
      * build headers
      *
@@ -63,4 +52,5 @@ public class NettyWriteResponseFilter implements GatewayFilter {
             response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
         }
     }
+
 }

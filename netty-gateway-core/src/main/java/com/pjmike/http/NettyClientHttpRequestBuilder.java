@@ -3,6 +3,7 @@ package com.pjmike.http;
 
 import com.pjmike.route.Route;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.*;
 import io.netty.handler.codec.http.multipart.HttpPostRequestEncoder;
 import io.netty.util.CharsetUtil;
@@ -83,7 +84,7 @@ public class NettyClientHttpRequestBuilder {
             //TODO
             return;
         }
-        ByteBuf content = this.nativeRequest.content();
+        ByteBuf content = Unpooled.copiedBuffer(this.nativeRequest.content());
         if (HttpHeaderValues.APPLICATION_JSON.toString().equals(contentType)) {
             this.newRequest.headers().set(HttpHeaderNames.CONTENT_LENGTH, content.readableBytes());
             this.newRequest.content().writeBytes(content);

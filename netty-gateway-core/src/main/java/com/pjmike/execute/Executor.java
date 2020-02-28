@@ -16,14 +16,8 @@ public interface Executor<T> {
      *
      * @param args
      * @return
+     * @throws Exception
      */
     T execute(Object... args) throws Exception;
 
-    /**
-     * 异步执行任务获取 Future
-     *
-     * @param args 请求对象
-     * @return 异步结果
-     */
-    Future<T> asyncExecute(Promise<T> promise, Object... args) throws Exception;
 }

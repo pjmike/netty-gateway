@@ -1,12 +1,11 @@
 package com.pjmike.context;
 
 import com.pjmike.attribute.Attributes;
-import com.pjmike.http.NettyHttpRequest;
+import com.pjmike.http.NettyClientHttpRequest;
 import com.pjmike.route.Route;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
-import io.netty.handler.codec.http.HttpResponse;
 
 /**
  * @description:
@@ -22,7 +21,7 @@ public class RequestContextUtil {
         return channel.attr(Attributes.REQUEST).get();
     }
 
-    public static void setNettyHttpRequest(Channel channel, NettyHttpRequest nettyHttpRequest) {
+    public static void setNettyHttpRequest(Channel channel, NettyClientHttpRequest nettyHttpRequest) {
         channel.attr(Attributes.NETTY_PROXY_HTTP_REQUEST).set(nettyHttpRequest);
     }
     public static void setKeepAlive(Channel channel, Boolean keepAlive) {

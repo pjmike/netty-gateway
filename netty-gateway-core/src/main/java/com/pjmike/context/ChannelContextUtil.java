@@ -42,4 +42,12 @@ public class ChannelContextUtil {
     public static FullHttpResponse getResponse(Channel channel) {
         return channel.attr(Attributes.RESPONSE).get();
     }
+
+    public static void setException(Channel channel, Throwable throwable) {
+        channel.attr(Attributes.EXCEPTION).set(throwable);
+    }
+
+    public static Throwable getException(Channel channel) {
+        return channel.attr(Attributes.EXCEPTION).get();
+    }
 }

@@ -2,6 +2,8 @@ package com.pjmike.netty.client.handler;
 
 import com.pjmike.attribute.Attributes;
 import com.pjmike.constants.CommonConstants;
+import com.pjmike.context.ChannelContextUtil;
+import com.pjmike.filter.handle.FilterWebHandler;
 import com.pjmike.http.NettyHttpResponseUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -36,9 +38,12 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<FullHttpResp
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpResponse msg) throws Exception {
         log.info("Netty Client read data: {}", msg.content().toString(CharsetUtil.UTF_8));
         Channel clientChannel = ctx.channel();
-        //write response
+        Channel serverChannel = clientChannel.attr(Attributes.SERVER_CHANNEL).get();
         FullHttpResponse response = NettyHttpResponseUtil.buildSuccessResponse(msg);
-        setResponse(clientChannel,response);
+
+        ChannelContextUtil.setResponse(serverChannel, response);
+        //write response
+        FilterWebHandler.getInstance().postAction(serverChannel);
 
         clientChannel.attr(Attributes.CLIENT_POOL).get().release(clientChannel);
         clientChannel.pipeline().remove("ReadTimeoutHandler");
@@ -58,15 +63,8 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<FullHttpResp
         setResponse(ctx.channel(), response);
     }
 
-    /**
-     * 生产者生产数据，即响应数据保存在Channel中
-     * @param response 响应数据
-     */
-    private void setResponse(Channel clientChannel,FullHttpResponse response) {
-        Channel serverChannel = clientChannel.attr(Attributes.SERVER_CHANNEL).get();
-        synchronized (CommonConstants.OBJECT) {
-            serverChannel.attr(Attributes.RESPONSE).set(response);
-            CommonConstants.OBJECT.notifyAll();
-        }
+    private void setResponse(Channel channel, FullHttpResponse response) {
+        Channel serverChannel = channel.attr(Attributes.SERVER_CHANNEL).get();
+        ChannelContextUtil.setResponse(serverChannel, response);
     }
 }

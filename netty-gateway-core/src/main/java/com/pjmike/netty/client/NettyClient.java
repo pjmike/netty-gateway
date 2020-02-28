@@ -1,5 +1,6 @@
 package com.pjmike.netty.client;
 
+import com.alibaba.fastjson.JSON;
 import com.pjmike.attribute.Attributes;
 import com.pjmike.http.NettyClientHttpRequest;
 
@@ -59,6 +60,8 @@ public class NettyClient {
                 clientChannel.attr(Attributes.SERVER_CHANNEL).set(serverChannel);
                 clientChannel.attr(Attributes.CLIENT_POOL).set(pool);
                 //write data
+                System.err.println(JSON.toJSONString(httpRequest.getHttpRequest()));
+
                 clientChannel.writeAndFlush(httpRequest.getHttpRequest());
             }
         });

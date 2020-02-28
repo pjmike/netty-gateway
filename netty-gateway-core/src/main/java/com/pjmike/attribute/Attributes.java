@@ -15,6 +15,8 @@ import io.netty.util.AttributeKey;
  */
 public class Attributes {
     public static final AttributeKey<FullHttpRequest> REQUEST = AttributeKey.newInstance("httpRequest");
+    public static final AttributeKey<Throwable> EXCEPTION = AttributeKey.newInstance("exception");
+
     public static final AttributeKey<NettyClientHttpRequest> NETTY_PROXY_HTTP_REQUEST = AttributeKey.newInstance("netty_proxy_http_request");
     public static final AttributeKey<Boolean> KEEPALIVE = AttributeKey.newInstance("keepAlive");
     public static final AttributeKey<Route> GATEWAY_ROUTE_ATTR = AttributeKey.newInstance("gateway_route_attr");

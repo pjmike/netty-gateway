@@ -1,19 +1,9 @@
 package com.pjmike.filter;
 
-
-import io.netty.channel.Channel;
-
-import java.io.IOException;
-
 /**
+ * @description: 作用于单个路由
  * @author: pjmike
- * @create: 2019/11/28
+ * @create: 2020/02/25
  */
-public interface GatewayFilter {
-    /**
-     * 过滤
-     * @param channel
-     * @param filterChain
-     */
-    void filter(Channel channel,GatewayFilterChain filterChain) throws Exception;
+public abstract class GatewayFilter extends AbstractFilter {
 }

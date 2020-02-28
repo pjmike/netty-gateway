@@ -1,11 +1,11 @@
-package com.pjmike.filter;
+package com.pjmike.filter.pre;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.util.concurrent.RateLimiter;
-import com.pjmike.annotation.Order;
 import com.pjmike.attribute.Attributes;
+import com.pjmike.filter.GlobalFilter;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.FullHttpRequest;
 
@@ -25,8 +25,7 @@ import java.util.concurrent.TimeUnit;
  * @author: pjmike
  * @create: 2020/01/16
  */
-@Order(-10)
-public class AntiSpiderFilter implements GatewayFilter{
+public class AntiSpiderFilter extends GlobalFilter {
     private LoadingCache<String, RateLimiter> limiterCache = CacheBuilder.newBuilder()
             .maximumSize(1000)
             //每天清理缓存
@@ -38,8 +37,19 @@ public class AntiSpiderFilter implements GatewayFilter{
                     return RateLimiter.create(2);
                 }
             });
+
+
     @Override
-    public void filter(Channel channel, GatewayFilterChain filterChain) throws Exception {
+    public String filterType() {
+        return "pre";
+    }
+
+    @Override
+    public int filterOrder() {
+        return -10;
+    }
+    @Override
+    public void filter(Channel channel) throws Exception {
         FullHttpRequest request = channel.attr(Attributes.REQUEST).get();
         String clientIp = request.headers().get("X-Forwarded-For");
         if (clientIp == null) {
@@ -52,6 +62,6 @@ public class AntiSpiderFilter implements GatewayFilter{
             //TODO 自定义Exception抛出
             throw new RuntimeException("1s内IP请求次数不能超过2");
         }
-        filterChain.filter(channel);
     }
+
 }

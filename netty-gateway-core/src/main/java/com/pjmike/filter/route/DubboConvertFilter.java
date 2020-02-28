@@ -1,18 +1,15 @@
-package com.pjmike.filter;
+package com.pjmike.filter.route;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pjmike.context.ChannelContextUtil;
-import com.pjmike.http.HttpRequestDecompose;
+import com.pjmike.filter.GlobalFilter;
 import com.pjmike.utils.DubboUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.handler.codec.http.FullHttpRequest;
-import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URI;
-import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -21,15 +18,14 @@ import java.util.Map;
  * @create: 2020/02/15
  */
 @Slf4j
-public class DubboConvertFilter implements GatewayFilter{
+public class DubboConvertFilter extends GlobalFilter {
     @Override
-    public void filter(Channel channel, GatewayFilterChain filterChain) throws Exception {
+    public void filter(Channel channel) throws Exception {
         FullHttpRequest request = ChannelContextUtil.getRequest(channel);
         URI route_uri = ChannelContextUtil.getRoute(channel).getUri();
         String scheme = route_uri.getScheme();
 
         if ("http".equals(scheme) || "https".equals(scheme)) {
-            filterChain.filter(channel);
             return;
         }
         log.info("请求路由的uri是 : {} ,协议 {}", route_uri, scheme);
@@ -43,6 +39,15 @@ public class DubboConvertFilter implements GatewayFilter{
         String interfaceClassName = url.substring(24);
         JSONObject result = DubboUtil.sendRequest(interfaceClassName);
         channel.writeAndFlush(request).addListener(ChannelFutureListener.CLOSE);
-        return;
+    }
+
+    @Override
+    public String filterType() {
+        return "route";
+    }
+
+    @Override
+    public int filterOrder() {
+        return 20;
     }
 }

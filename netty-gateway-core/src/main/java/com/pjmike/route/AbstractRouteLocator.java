@@ -13,7 +13,13 @@ public abstract class AbstractRouteLocator implements RouteLocator{
     public Route lookupRoute(Channel channel) throws Exception{
         return getRoutes()
                 .stream()
-                .filter(route -> route.getPredicate().test(channel))
+                .filter(route -> {
+                    if (route.getPredicate() == null) {
+                        return true;
+                    } else {
+                        return route.getPredicate().test(channel);
+                    }
+                })
                 .findFirst()
                 .orElse(null);
     }

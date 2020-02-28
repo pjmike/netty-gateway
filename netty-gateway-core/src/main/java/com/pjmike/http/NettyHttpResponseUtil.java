@@ -1,8 +1,6 @@
 package com.pjmike.http;
 
-import com.pjmike.attribute.Attributes;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.Channel;
 import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
 
