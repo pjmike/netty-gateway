@@ -1,8 +1,10 @@
 package com.pjmike.filter;
 
 
+import com.pjmike.filter.post.NettyErrorFilter;
 import com.pjmike.filter.post.NettyWriteResponseFilter;
 import com.pjmike.filter.pre.AntiSpiderFilter;
+import com.pjmike.filter.pre.AuthTokenFilter;
 import com.pjmike.filter.pre.RateLimitFilter;
 import com.pjmike.filter.route.NettyRoutingFilter;
 import com.pjmike.filter.pre.SentinelFilter;
@@ -24,10 +26,12 @@ public class FilterRegistry {
     private FilterRegistry() {
         //预先加载Filters
         add(new AntiSpiderFilter())
+                .add(new AuthTokenFilter())
                 .add(new SentinelFilter())
                 .add(new RateLimitFilter())
                 .add(new NettyRoutingFilter())
-                .add(new NettyWriteResponseFilter());
+                .add(new NettyWriteResponseFilter())
+                .add(new NettyErrorFilter());
 
     }
 

@@ -9,6 +9,9 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @description:
@@ -19,10 +22,11 @@ import java.util.List;
 public class ApplicationContext {
     private GatewayExecutor gatewayExecutor;
     private CompositeRouteLocator compositeRouteLocator;
-
+    private Map<String, String> tokenMap = new ConcurrentHashMap<>();
     public void initializeBean() {
         this.compositeRouteLocator = initRouteLocator();
         this.gatewayExecutor = new GatewayExecutor(this.compositeRouteLocator, FilterWebHandler.getInstance());
+        setUrlTokenMap();
     }
 
     private static final ApplicationContext INSTANCE = new ApplicationContext();
@@ -40,5 +44,14 @@ public class ApplicationContext {
         routeLocators.add(new AnnotationRouteLocator());
         CompositeRouteLocator compositeRouteLocator = new CompositeRouteLocator(routeLocators);
         return compositeRouteLocator;
+    }
+
+    private void setUrlTokenMap() {
+        //需要鉴权的URL以及提前设置好的Token
+        put("/login", "abcd_1234_user");
+    }
+
+    private void put(String key, String value) {
+        this.tokenMap.put(key, value);
     }
 }
