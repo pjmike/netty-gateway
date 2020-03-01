@@ -59,9 +59,8 @@ public class NettyClient {
                 //clientChannel bind with serverChannel
                 clientChannel.attr(Attributes.SERVER_CHANNEL).set(serverChannel);
                 clientChannel.attr(Attributes.CLIENT_POOL).set(pool);
-                //write data
-                System.err.println(JSON.toJSONString(httpRequest.getHttpRequest()));
 
+                //write data
                 clientChannel.writeAndFlush(httpRequest.getHttpRequest());
             }
         });

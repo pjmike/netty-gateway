@@ -39,10 +39,8 @@ public class NettyWriteResponseFilter extends GlobalFilter {
             return;
         }
         if (keepAlive) {
-            System.out.println(keepAlive);
             response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
         } else {
-            System.err.println("meiyou");
             response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.CLOSE);
         }
         ChannelFuture future = channel.writeAndFlush(response);
