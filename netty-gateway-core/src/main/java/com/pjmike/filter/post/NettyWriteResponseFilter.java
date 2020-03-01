@@ -4,6 +4,7 @@ import com.pjmike.attribute.Attributes;
 import com.pjmike.context.ChannelContextUtil;
 import com.pjmike.filter.GlobalFilter;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpHeaderNames;
@@ -28,29 +29,25 @@ public class NettyWriteResponseFilter extends GlobalFilter {
     public int filterOrder() {
         return 100;
     }
+
     @Override
     public void filter(Channel channel) {
-        log.info("serverChannel id : {} ",channel.id());
+        log.info("serverChannel id : {} ", channel.id());
         FullHttpResponse response = ChannelContextUtil.getResponse(channel);
-        buildHeaders(response, channel);
-        channel.writeAndFlush(response)
-                .addListener(ChannelFutureListener.CLOSE);
-
-    }
-    /**
-     * build headers
-     *
-     * @param response
-     * @param channel
-     */
-    private void buildHeaders(FullHttpResponse response, Channel channel) {
+        Boolean keepAlive = ChannelContextUtil.getKeepAlive(channel);
         if (response == null) {
             return;
         }
-        Boolean keepAlive = channel.attr(Attributes.KEEPALIVE).get();
         if (keepAlive) {
+            System.out.println(keepAlive);
             response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
+        } else {
+            System.err.println("meiyou");
+            response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.CLOSE);
+        }
+        ChannelFuture future = channel.writeAndFlush(response);
+        if (!keepAlive) {
+            future.addListener(ChannelFutureListener.CLOSE);
         }
     }
-
 }

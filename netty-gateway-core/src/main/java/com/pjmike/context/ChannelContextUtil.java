@@ -28,6 +28,9 @@ public class ChannelContextUtil {
         channel.attr(Attributes.KEEPALIVE).set(keepAlive);
     }
 
+    public static Boolean getKeepAlive(Channel channel) {
+        return channel.attr(Attributes.KEEPALIVE).get();
+    }
     public static void setRoute(Channel channel, Route route) {
         channel.attr(Attributes.GATEWAY_ROUTE_ATTR).set(route);
     }

@@ -67,7 +67,7 @@ public class NettyClientHttpRequestBuilder {
             URI nativeUri = new URI(this.nativeRequest.uri());
             newUri = newUri + nativeUri.getPath();
             QueryStringEncoder queryStringEncoder = new QueryStringEncoder(newUri);
-            QueryStringDecoder queryStringDecoder = new QueryStringDecoder(nativeRequest.uri());
+            QueryStringDecoder queryStringDecoder = new QueryStringDecoder(this.nativeRequest.uri());
             Map<String, List<String>> parameters = queryStringDecoder.parameters();
             parameters.forEach((key, values) -> values.forEach(value -> {
                 queryStringEncoder.addParam(key, value);

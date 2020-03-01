@@ -4,6 +4,7 @@ import com.pjmike.context.ChannelContextUtil;
 import com.pjmike.filter.GlobalFilter;
 import com.pjmike.http.NettyHttpResponseUtil;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFutureListener;
 
 /**
  * @description:
@@ -25,7 +26,8 @@ public class NettyErrorFilter extends GlobalFilter {
     public void filter(Channel channel) throws Exception {
         Throwable exception = ChannelContextUtil.getException(channel);
         if (exception != null) {
-            channel.writeAndFlush(NettyHttpResponseUtil.buildFailResponse(exception.getMessage()));
+            channel.writeAndFlush(NettyHttpResponseUtil.buildFailResponse(exception.getMessage()))
+                    .addListener(ChannelFutureListener.CLOSE);
         }
     }
 }
