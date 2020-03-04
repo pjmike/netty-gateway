@@ -1,6 +1,7 @@
 package com.pjmike.http;
 
 
+import com.pjmike.exception.GatewayException;
 import com.pjmike.route.Route;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -74,14 +75,12 @@ public class NettyClientHttpRequestBuilder {
             }));
             return queryStringEncoder;
         } catch (URISyntaxException e) {
-            e.printStackTrace();
-            throw new RuntimeException("system error");
+            throw new GatewayException(e, HttpResponseStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
     private void  buildBody() throws Exception {
         String contentType = getContentType();
         if (StringUtils.isEmpty(contentType)) {
-            //TODO
             return;
         }
         ByteBuf content = Unpooled.copiedBuffer(this.nativeRequest.content());

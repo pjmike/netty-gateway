@@ -30,7 +30,7 @@ public class FilterLoader {
     }
 
     private List<GatewayFilter> loadFilters() {
-        List<GlobalFilter> filters = FilterRegistry.getInstance().getAllFilters();
+        Collection<GlobalFilter> filters = FilterRegistry.getInstance().getAllFilters();
         return filters.stream()
                 .map(GatewayFilterAdapter::new).collect(Collectors.toList());
     }
