@@ -45,11 +45,13 @@ public class FilterWebHandler implements WebHandler {
         } catch (GatewayException e) {
             error(e,channel);
         }
-        try {
-            route(channel);
-        } catch (GatewayException e) {
-            error(e, channel);
-        }
+        routePool.execute(()-> {
+            try {
+                route(channel);
+            } catch (GatewayException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public void postAction(Channel channel) throws GatewayException {

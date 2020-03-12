@@ -15,8 +15,16 @@ public interface RouteLocator {
      * 获取路由列表
      *
      * @return
+     * @throws Exception
      */
     List<Route> getRoutes() throws Exception;
 
+    /**
+     * 查找符合路由条件的 Route
+     *
+     * @param channel
+     * @return
+     * @throws Exception
+     */
     Route lookupRoute(Channel channel) throws Exception;
 }
