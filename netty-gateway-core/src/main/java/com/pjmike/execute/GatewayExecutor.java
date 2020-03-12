@@ -24,6 +24,9 @@ public class GatewayExecutor extends AbstractExecutor<Void> {
     }
     @Override
     protected Void doExecute(Object... args) throws Exception {
+        if (args == null || args.length <= 0) {
+            return null;
+        }
         Channel channel = (Channel)args[0];
         //find route
         Route route = this.routeLocator.lookupRoute(channel);

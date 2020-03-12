@@ -52,7 +52,7 @@ public class FilterWebHandler implements WebHandler {
         }
     }
 
-    public void postAction(Channel channel) {
+    public void postAction(Channel channel) throws GatewayException {
         postRoute(channel);
     }
 

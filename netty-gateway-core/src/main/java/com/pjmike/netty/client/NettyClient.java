@@ -36,11 +36,11 @@ public class NettyClient {
         return instance;
     }
     public NettyClient() {
-        bootstrap.group(group)
+        this.bootstrap.group(this.group)
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 500)
                 .option(ChannelOption.TCP_NODELAY, true)
                 .channel(NioSocketChannel.class);
-        channelPoolMap = new AbstractChannelPoolMap<NettyClientHttpRequest, SimpleChannelPool>() {
+        this.channelPoolMap = new AbstractChannelPoolMap<NettyClientHttpRequest, SimpleChannelPool>() {
             @Override
             protected SimpleChannelPool newPool(NettyClientHttpRequest key) {
 

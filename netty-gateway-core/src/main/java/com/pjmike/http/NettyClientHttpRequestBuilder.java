@@ -63,7 +63,7 @@ public class NettyClientHttpRequestBuilder {
      * build new uri
      * @param newUri
      */
-    private QueryStringEncoder buildNewRequestParams(String newUri) {
+    private QueryStringEncoder buildNewRequestParams(String newUri) throws GatewayException {
         try {
             URI nativeUri = new URI(this.nativeRequest.uri());
             newUri = newUri + nativeUri.getPath();

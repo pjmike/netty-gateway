@@ -3,11 +3,11 @@ package com.pjmike.exception;
 import io.netty.handler.codec.http.HttpResponseStatus;
 
 /**
- * @description:
+ * All Handled exceptions in gateway are GatewayException，it's unchecked
  * @author: pjmike
  * @create: 2020/02/24
  */
-public class GatewayException extends RuntimeException{
+public class GatewayException extends Exception{
     private HttpResponseStatus status;
     private String message;
 

@@ -32,7 +32,6 @@ public class PropertiesUtil {
     private PropertiesUtil(){
 
     }
-
     static{
         propertiesUtilsHolder = new HashMap<>();
         propertiesMap = new HashMap<>();

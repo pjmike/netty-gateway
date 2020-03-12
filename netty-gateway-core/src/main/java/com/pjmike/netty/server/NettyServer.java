@@ -28,10 +28,10 @@ public class NettyServer {
         this.port = port;
     }
     public void start() {
-        serverBootstrap = new ServerBootstrap();
-        bossGroup = new NioEventLoopGroup(1, new DefaultThreadFactory("boss", true));
-        workGroup = new NioEventLoopGroup(0, new DefaultThreadFactory("worker", true));
-        serverBootstrap.group(bossGroup, workGroup)
+        this.serverBootstrap = new ServerBootstrap();
+        this.bossGroup = new NioEventLoopGroup(1, new DefaultThreadFactory("boss", true));
+        this.workGroup = new NioEventLoopGroup(0, new DefaultThreadFactory("worker", true));
+        this.serverBootstrap.group(this.bossGroup, this.workGroup)
                 .channel(NioServerSocketChannel.class)
                 .option(ChannelOption.SO_BACKLOG, 1024)
                 .childOption(ChannelOption.TCP_NODELAY, Boolean.TRUE)
