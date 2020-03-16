@@ -3,12 +3,9 @@ package com.pjmike.filter;
 
 import com.pjmike.filter.post.NettyErrorFilter;
 import com.pjmike.filter.post.NettyWriteResponseFilter;
-import com.pjmike.filter.pre.AntiSpiderFilter;
-import com.pjmike.filter.pre.AuthTokenFilter;
-import com.pjmike.filter.pre.RateLimitFilter;
-import com.pjmike.filter.route.DubboConvertFilter;
+import com.pjmike.filter.pre.*;
+import com.pjmike.filter.route.DubboExecutor;
 import com.pjmike.filter.route.NettyRoutingFilter;
-import com.pjmike.filter.pre.SentinelFilter;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -35,13 +32,13 @@ public class FilterRegistry {
     private void initFilters() {
         put(RateLimitFilter.class.getName(), new RateLimitFilter());
         put(SentinelFilter.class.getName(), new SentinelFilter());
+        put(PreFilter.class.getName(), new PreFilter());
+        put(FlowFilter.class.getName(), new FlowFilter());
         put(AuthTokenFilter.class.getName(), new AuthTokenFilter());
         put(AntiSpiderFilter.class.getName(), new AntiSpiderFilter());
         put(NettyRoutingFilter.class.getName(), new NettyRoutingFilter());
         put(NettyErrorFilter.class.getName(), new NettyErrorFilter());
         put(NettyWriteResponseFilter.class.getName(), new NettyWriteResponseFilter());
-        put(DubboConvertFilter.class.getName(), new DubboConvertFilter());
-
     }
 
     public void put(String name, GlobalFilter filter) {

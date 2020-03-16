@@ -1,11 +1,10 @@
 package com.pjmike.handler.predicate;
 
-import com.pjmike.attribute.Attributes;
+import com.pjmike.constants.attribute.Attributes;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.util.CharsetUtil;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 

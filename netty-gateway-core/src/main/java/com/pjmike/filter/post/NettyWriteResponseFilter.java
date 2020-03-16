@@ -1,6 +1,5 @@
 package com.pjmike.filter.post;
 
-import com.pjmike.attribute.Attributes;
 import com.pjmike.context.ChannelContextUtil;
 import com.pjmike.filter.GlobalFilter;
 import io.netty.channel.Channel;

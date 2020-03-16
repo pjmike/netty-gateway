@@ -4,7 +4,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.util.concurrent.RateLimiter;
-import com.pjmike.attribute.Attributes;
+import com.pjmike.context.ChannelContextUtil;
 import com.pjmike.exception.GatewayException;
 import com.pjmike.filter.GlobalFilter;
 import io.netty.channel.Channel;
@@ -52,7 +52,7 @@ public class AntiSpiderFilter extends GlobalFilter {
     }
     @Override
     public void filter(Channel channel) throws Exception {
-        FullHttpRequest request = channel.attr(Attributes.REQUEST).get();
+        FullHttpRequest request = ChannelContextUtil.getRequest(channel);
         String clientIp = request.headers().get("X-Forwarded-For");
         if (clientIp == null) {
             InetSocketAddress inetSocketAddress = (InetSocketAddress) channel.remoteAddress();
@@ -64,5 +64,4 @@ public class AntiSpiderFilter extends GlobalFilter {
             throw new GatewayException(HttpResponseStatus.INTERNAL_SERVER_ERROR,"同一IP访问次数1s内不能超过2次");
         }
     }
-
 }

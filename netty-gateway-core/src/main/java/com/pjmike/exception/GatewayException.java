@@ -11,6 +11,9 @@ public class GatewayException extends Exception{
     private HttpResponseStatus status;
     private String message;
 
+    public GatewayException(String message) {
+        this(HttpResponseStatus.INTERNAL_SERVER_ERROR, message);
+    }
     public GatewayException(Throwable e,HttpResponseStatus status,String message) {
         super(message, e);
         this.status = status;

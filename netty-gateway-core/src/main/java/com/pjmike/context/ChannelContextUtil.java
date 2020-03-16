@@ -1,6 +1,6 @@
 package com.pjmike.context;
 
-import com.pjmike.attribute.Attributes;
+import com.pjmike.constants.attribute.Attributes;
 import com.pjmike.http.NettyClientHttpRequest;
 import com.pjmike.route.Route;
 import io.netty.channel.Channel;
@@ -48,6 +48,14 @@ public class ChannelContextUtil {
 
     public static void setException(Channel channel, Throwable throwable) {
         channel.attr(Attributes.EXCEPTION).set(throwable);
+    }
+
+    public static void setRpcType(Channel channel,String rpcType) {
+        channel.attr(Attributes.RPC_TYPE).set(rpcType);
+    }
+
+    public static String getRpcType(Channel channel) {
+        return channel.attr(Attributes.RPC_TYPE).get();
     }
 
     public static Throwable getException(Channel channel) {

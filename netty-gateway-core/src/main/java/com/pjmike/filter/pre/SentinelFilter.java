@@ -5,7 +5,7 @@ import com.alibaba.csp.sentinel.SphU;
 import com.alibaba.csp.sentinel.context.ContextUtil;
 
 
-import com.pjmike.attribute.Attributes;
+import com.pjmike.context.ChannelContextUtil;
 import com.pjmike.filter.GlobalFilter;
 import com.pjmike.http.NettyHttpResponseUtil;
 import io.netty.channel.Channel;
@@ -47,9 +47,8 @@ public class SentinelFilter extends GlobalFilter {
     }
 
     private String getRequestPath(Channel channel) throws URISyntaxException {
-        FullHttpRequest httpRequest = channel.attr(Attributes.REQUEST).get();
+        FullHttpRequest httpRequest = ChannelContextUtil.getRequest(channel);
         URI uri = new URI(httpRequest.uri());
-        System.err.println(httpRequest.refCnt());
         return uri.getPath();
     }
 

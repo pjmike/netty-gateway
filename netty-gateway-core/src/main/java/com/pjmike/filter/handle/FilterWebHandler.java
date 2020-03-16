@@ -14,6 +14,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+
 /**
  * @description:
  * @author: pjmike
@@ -25,11 +26,11 @@ public class FilterWebHandler implements WebHandler {
     public static FilterWebHandler getInstance() {
         return INSTANCE;
     }
+    private ExecutorService routePool = new ThreadPoolExecutor(5, 100, 30L, TimeUnit.MILLISECONDS,
+            new LinkedBlockingDeque<>(), new ThreadFactoryBuilder().setNameFormat("Route-%d-thread").build());
 
     private FilterProcessor filterProcessor = new FilterProcessor();
 
-    private ExecutorService routePool = new ThreadPoolExecutor(5, 100, 30L, TimeUnit.MILLISECONDS,
-            new LinkedBlockingDeque<>(), new ThreadFactoryBuilder().setNameFormat("Route-%d-thread").build());
 
     @Override
     public void handle(Channel channel) throws Exception {
@@ -45,23 +46,21 @@ public class FilterWebHandler implements WebHandler {
         } catch (GatewayException e) {
             error(e,channel);
         }
-        routePool.execute(()-> {
-            try {
-                route(channel);
-            } catch (GatewayException e) {
-                e.printStackTrace();
-            }
-        });
     }
 
     public void postAction(Channel channel) throws GatewayException {
         postRoute(channel);
     }
+    public void routeAction(Channel channel) throws GatewayException{
+        route(channel);
+    }
 
+    public void errorAction(Channel channel, Throwable throwable) {
+        error(throwable, channel);
+    }
     private void route(Channel channel) throws GatewayException{
         this.filterProcessor.route(channel);
     }
-
     private void error(Throwable e,Channel channel) {
         ChannelContextUtil.setException(channel,e);
         this.filterProcessor.error(channel);

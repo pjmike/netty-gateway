@@ -1,4 +1,4 @@
-package com.pjmike.bootstrap;
+package com.pjmike;
 
 import com.pjmike.netty.server.NettyServer;
 
@@ -6,7 +6,7 @@ import com.pjmike.netty.server.NettyServer;
  * @author: pjmike
  * @create: 2019/12/08
  */
-public class ServerBootStrap {
+public class Application {
     public static void main(String[] args) {
         NettyServer server = new NettyServer(8989);
         try {

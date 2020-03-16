@@ -13,7 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import java.net.URI;
 
 /**
- * @description: 鉴权Filter
+ * @description: 简单的鉴权Filter
  * @author: pjmike
  * @create: 2020/03/01
  */

@@ -1,7 +1,6 @@
 package com.pjmike.netty.client;
 
-import com.alibaba.fastjson.JSON;
-import com.pjmike.attribute.Attributes;
+import com.pjmike.constants.attribute.Attributes;
 import com.pjmike.http.NettyClientHttpRequest;
 
 import com.pjmike.netty.client.handler.NettyClientPoolHandler;
