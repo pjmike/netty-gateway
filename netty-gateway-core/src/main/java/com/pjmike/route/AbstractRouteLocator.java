@@ -1,5 +1,6 @@
 package com.pjmike.route;
 
+import com.pjmike.exception.GatewayException;
 import io.netty.channel.Channel;
 
 /**
@@ -21,6 +22,6 @@ public abstract class AbstractRouteLocator implements RouteLocator{
                     }
                 })
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(()->new GatewayException("no available route"));
     }
 }

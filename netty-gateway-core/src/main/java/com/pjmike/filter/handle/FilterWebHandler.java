@@ -1,13 +1,21 @@
 package com.pjmike.filter.handle;
 
+import com.alibaba.csp.sentinel.Entry;
+import com.alibaba.csp.sentinel.SphU;
+import com.alibaba.csp.sentinel.context.ContextUtil;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.pjmike.context.ChannelContextUtil;
 import com.pjmike.exception.GatewayException;
 import com.pjmike.filter.*;
 
+import com.pjmike.http.NettyHttpResponseUtil;
 import com.pjmike.route.Route;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.handler.codec.http.FullHttpRequest;
+import lombok.extern.slf4j.Slf4j;
 
+import java.net.URI;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -20,12 +28,16 @@ import java.util.concurrent.TimeUnit;
  * @author: pjmike
  * @create: 2019/11/28
  */
+@Slf4j
 public class FilterWebHandler implements WebHandler {
+    private static final String SENTINEL_GATEWAY_NETTY_ROUTE = "sentinel_gateway_netty_route";
+
     private static final FilterWebHandler INSTANCE = new FilterWebHandler();
 
     public static FilterWebHandler getInstance() {
         return INSTANCE;
     }
+
     private ExecutorService routePool = new ThreadPoolExecutor(5, 100, 30L, TimeUnit.MILLISECONDS,
             new LinkedBlockingDeque<>(), new ThreadFactoryBuilder().setNameFormat("Route-%d-thread").build());
 
@@ -44,32 +56,65 @@ public class FilterWebHandler implements WebHandler {
         try {
             preRoute(channel);
         } catch (GatewayException e) {
-            error(e,channel);
+            error(e, channel);
         }
     }
 
     public void postAction(Channel channel) throws GatewayException {
         postRoute(channel);
     }
-    public void routeAction(Channel channel) throws GatewayException{
-        route(channel);
+
+    public void routeAction(Channel channel) throws GatewayException {
+        Entry entry = null;
+        String requestPath = getRequestPath(channel);
+        try {
+            ContextUtil.enter(SENTINEL_GATEWAY_NETTY_ROUTE + requestPath);
+            entry = SphU.entry(requestPath);
+            route(channel);
+        } catch (Exception e) {
+            // 熔断降级
+            fallbackHandler(channel);
+        } finally {
+            if (entry != null) {
+                entry.exit();
+            }
+            ContextUtil.exit();
+        }
+    }
+
+    /**
+     * 熔断降级
+     *
+     * @param channel
+     */
+    private void fallbackHandler(Channel channel) {
+        channel.writeAndFlush(NettyHttpResponseUtil.buildFailResponse("proxy request failed"))
+                .addListener(ChannelFutureListener.CLOSE);
+    }
+
+    private String getRequestPath(Channel channel) {
+        FullHttpRequest httpRequest = ChannelContextUtil.getRequest(channel);
+        return URI.create(httpRequest.uri()).getPath();
     }
 
     public void errorAction(Channel channel, Throwable throwable) {
         error(throwable, channel);
     }
-    private void route(Channel channel) throws GatewayException{
+
+    private void route(Channel channel) throws GatewayException {
         this.filterProcessor.route(channel);
     }
-    private void error(Throwable e,Channel channel) {
-        ChannelContextUtil.setException(channel,e);
+
+    private void error(Throwable e, Channel channel) {
+        ChannelContextUtil.setException(channel, e);
         this.filterProcessor.error(channel);
     }
-    private void postRoute(Channel channel) throws GatewayException{
+
+    private void postRoute(Channel channel) throws GatewayException {
         this.filterProcessor.postRoute(channel);
     }
 
-    private void preRoute(Channel channel) throws GatewayException{
+    private void preRoute(Channel channel) throws GatewayException {
         this.filterProcessor.preRoute(channel);
     }
 }

@@ -31,7 +31,6 @@ public class FilterRegistry {
 
     private void initFilters() {
         put(RateLimitFilter.class.getName(), new RateLimitFilter());
-        put(SentinelFilter.class.getName(), new SentinelFilter());
         put(PreFilter.class.getName(), new PreFilter());
         put(FlowFilter.class.getName(), new FlowFilter());
         put(AuthTokenFilter.class.getName(), new AuthTokenFilter());

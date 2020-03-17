@@ -1,24 +1,19 @@
 package com.pjmike.filter.pre;
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.pjmike.context.ChannelContextUtil;
 import com.pjmike.enums.RpcTypeEnum;
 import com.pjmike.exception.GatewayException;
 import com.pjmike.filter.GlobalFilter;
 import com.pjmike.filter.handle.FilterWebHandler;
 import com.pjmike.filter.route.DubboExecutor;
-import com.pjmike.route.Route;
+
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
- * @description: 按照协议进行分流
+ * @description: 按照RPC协议进行分流
  * @author: pjmike
  * @create: 2020/03/16
  */

@@ -31,6 +31,9 @@ public class DubboExecutor {
         return INSTANCE;
     }
 
+    public void doExecute(String interfaceClassName) throws Exception{
+        Future<JSONObject> future = threadPoolExecutor.submit(() -> DubboUtil.sendRequest(interfaceClassName));
+    }
     public void execute(Channel channel) throws Exception {
         FullHttpRequest request = ChannelContextUtil.getRequest(channel);
         URI routeUri = ChannelContextUtil.getRoute(channel).getUri();

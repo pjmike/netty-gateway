@@ -30,9 +30,7 @@ public class GatewayExecutor extends AbstractExecutor<Void> {
         Channel channel = (Channel)args[0];
         //find route
         Route route = this.routeLocator.lookupRoute(channel);
-        if (Objects.isNull(route)) {
-            throw new GatewayException(HttpResponseStatus.NOT_FOUND,"no available route");
-        }
+
         //bind channel and route
         ChannelContextUtil.setRoute(channel,route);
         // execute filter

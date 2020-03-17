@@ -1,6 +1,6 @@
 package com.pjmike.netty.client;
 
-import com.pjmike.constants.attribute.Attributes;
+import com.pjmike.attribute.Attributes;
 import com.pjmike.http.NettyClientHttpRequest;
 
 import com.pjmike.netty.client.handler.NettyClientPoolHandler;

@@ -1,8 +1,7 @@
 package com.pjmike.context;
 
 import com.pjmike.execute.GatewayExecutor;
-import com.pjmike.filter.FilterRegistry;
-import com.pjmike.filter.AbstractFilter;
+
 import com.pjmike.filter.handle.FilterWebHandler;
 import com.pjmike.route.*;
 import lombok.Data;
@@ -10,7 +9,7 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+
 import java.util.concurrent.ConcurrentHashMap;
 
 /**

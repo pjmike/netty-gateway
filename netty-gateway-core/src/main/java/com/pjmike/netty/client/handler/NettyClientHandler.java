@@ -1,6 +1,6 @@
 package com.pjmike.netty.client.handler;
 
-import com.pjmike.constants.attribute.Attributes;
+import com.pjmike.attribute.Attributes;
 import com.pjmike.context.ChannelContextUtil;
 import com.pjmike.filter.handle.FilterWebHandler;
 import com.pjmike.http.NettyHttpResponseUtil;

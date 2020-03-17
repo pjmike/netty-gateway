@@ -1,4 +1,4 @@
-package com.pjmike.constants.attribute;
+package com.pjmike.attribute;
 
 import com.pjmike.http.NettyClientHttpRequest;
 import com.pjmike.route.Route;

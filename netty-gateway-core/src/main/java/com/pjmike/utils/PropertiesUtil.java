@@ -1,10 +1,13 @@
 package com.pjmike.utils;
 
+import com.pjmike.constants.CommonConstants;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -14,7 +17,7 @@ import java.util.Properties;
  *  读取配置文件的工具类
  * </p>
  * <p>
- *  来源：https://github.com/all4you/redant
+ *  参考自：https://github.com/all4you/redant
  * </p>
  * @author: pjmike
  * @create: 2019/12/07
@@ -127,6 +130,21 @@ public class PropertiesUtil {
         }
         return null;
     }
+
+    /**
+     * get string array
+     *
+     * @param key
+     * @return
+     */
+    public String[] getStringArray(String key) {
+        String value = getString(key);
+        if (StringUtils.isBlank(value)) {
+            return null;
+        }
+        return StringUtils.split(value, ",");
+    }
+
 
     /**
      * 获得配置信息的boolean值
