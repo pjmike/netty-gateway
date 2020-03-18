@@ -51,6 +51,13 @@ public class HttpRequestDecompose {
         return paramMap;
     }
 
+    public Map<String, Object> getHeaders() {
+        Map<String, Object> header = new HashMap<>(16);
+        this.httpRequest.headers().forEach(
+                entry -> header.put(entry.getKey(), entry.getValue())
+        );
+        return header;
+    }
     /**
      * 获取POST请求参数
      *
