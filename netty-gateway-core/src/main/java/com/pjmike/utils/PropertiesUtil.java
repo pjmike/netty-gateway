@@ -26,9 +26,9 @@ public class PropertiesUtil {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PropertiesUtil.class);
 
-    private static Map<String,PropertiesUtil> propertiesUtilsHolder = null;
+    private static Map<String,PropertiesUtil> propertiesUtilsHolder;
 
-    private static Map<PropertiesUtil, Properties> propertiesMap = null;
+    private static Map<PropertiesUtil, Properties> propertiesMap;
 
     private volatile boolean propertiesLoaded;
 

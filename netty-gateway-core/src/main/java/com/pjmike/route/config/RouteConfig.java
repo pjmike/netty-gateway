@@ -4,9 +4,6 @@ import com.pjmike.annotation.Bean;
 import com.pjmike.handler.predicate.PredicateUtils;
 import com.pjmike.route.Route;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 /**
  * @description: 用于自定义Router
  * @author: pjmike

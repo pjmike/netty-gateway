@@ -6,8 +6,11 @@ package com.pjmike.constants;
  * @create: 2019/12/08
  */
 public class CommonConstants {
-    /** ---------------------------配置文件--------------------------------**/
+    /**
+     * ---------------------------配置文件--------------------------------
+     **/
     public static final String PROPERTIES_PATH = "/netty-gateway.properties";
+    public static final String DUBBO_PROPERTIES_PATH = "/dubbo.properties";
 
     public static final String PROPERTIES_ROUTE_URI = "netty.gateway.routes.uri";
 
@@ -15,7 +18,14 @@ public class CommonConstants {
 
     public static final String PROPERTIES_ROUTE_PREDICATE_PATH = "netty.gateway.routes.predicates.path";
 
-    /** ---------------------------HTTP & HTTPS------------------------------**/
+    public static final String DUBBO_APPLICATION_NAME = "dubbo.application.name";
+
+    public static final String DUBBO_REGISTRY_ADDRESS = "dubbo.registry.address";
+
+    public static final String DUBBO_SERVICE_VERSION = "dubbo.service.version";
+    /**
+     * ---------------------------HTTP & HTTPS------------------------------
+     **/
     public static final String HTTP = "HTTP";
 
     public static final String HTTPS = "HTTPS";
