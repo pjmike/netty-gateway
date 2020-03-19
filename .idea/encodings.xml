@@ -4,5 +4,7 @@
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/netty-gateway-core" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/netty-gateway-core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/netty-gateway-dubbo/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/netty-gateway-http-test/src/main/java" charset="UTF-8" />
   </component>
 </project>

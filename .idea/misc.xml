@@ -12,6 +12,8 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/netty-gateway-dubbo/pom.xml" />
+        <option value="$PROJECT_DIR$/netty-gateway-http-test/pom.xml" />
       </list>
     </option>
   </component>

@@ -22,6 +22,12 @@ public class NettyHttpResponseUtil {
         return response;
     }
 
+    public static  FullHttpResponse buildResponse(String msg) {
+        FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, Unpooled.copiedBuffer(msg.getBytes()));
+        response.headers().set(HttpHeaderNames.CONTENT_LENGTH, msg.getBytes().length);
+        return response;
+    }
+
     public static  FullHttpResponse buildTimeoutResponse() {
         String msg = "proxy request timeout";
         FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, Unpooled.copiedBuffer(msg.getBytes(CharsetUtil.UTF_8)));

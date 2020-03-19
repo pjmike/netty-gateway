@@ -22,12 +22,13 @@ public class RouteConfig {
                 .build();
     }
 
-//    @Bean
-//    public Route dubboRoute() {
-//        return Route.builder()
-//                .id("path_dubbo_route")
-//                .uri("dubbo://127.0.0.1:20880/org.apache.dubbo.demo.DemoService")
-//                .build();
-//    }
+    @Bean
+    public Route dubboRoute() {
+        return Route.builder()
+                .id("path_dubbo_route")
+                .uri("dubbo://127.0.0.1:12345/com.pjmike.gateway.api.DemoService")
+                .predicate(PredicateUtils.path("/dubbo"))
+                .build();
+    }
 
 }

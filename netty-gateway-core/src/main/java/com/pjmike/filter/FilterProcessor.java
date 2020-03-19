@@ -29,7 +29,8 @@ public class FilterProcessor {
         } catch (GatewayException e) {
             throw e;
         } catch (Throwable throwable) {
-            throw new GatewayException(throwable,HttpResponseStatus.INTERNAL_SERVER_ERROR, "UNCAUGHT_EXCEPTION_IN_POST_FILTER_" + throwable.getClass().getName());
+            throwable.printStackTrace();
+            throw new GatewayException(throwable,HttpResponseStatus.INTERNAL_SERVER_ERROR, "UNCAUGHT_EXCEPTION_IN_PRE_FILTER_" + throwable.getClass().getName());
         }
     }
     public void postRoute(Channel channel) throws GatewayException {
