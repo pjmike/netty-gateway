@@ -1,7 +1,7 @@
 package com.pjmike.filter.pre;
 
-import com.pjmike.context.ApplicationContext;
-import com.pjmike.context.ChannelContextUtil;
+import com.pjmike.common.context.ApplicationContext;
+import com.pjmike.common.context.ChannelContext;
 import com.pjmike.exception.GatewayException;
 import com.pjmike.filter.GlobalFilter;
 import io.netty.channel.Channel;
@@ -31,7 +31,7 @@ public class AuthTokenFilter extends GlobalFilter {
 
     @Override
     public void filter(Channel channel) throws Exception {
-        FullHttpRequest request = ChannelContextUtil.getRequest(channel);
+        FullHttpRequest request = ChannelContext.getRequest(channel);
         String token = ApplicationContext.getInstance().getTokenMap().get(new URI(request.uri()).getPath());
         if (StringUtils.isBlank(token)) {
             return;

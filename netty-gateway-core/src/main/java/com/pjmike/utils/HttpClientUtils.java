@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.pjmike.constants.HttpClientConstants.*;
+import static com.pjmike.common.constants.HttpClientConstants.*;
 /**
  * @description:
  * @author: pjmike

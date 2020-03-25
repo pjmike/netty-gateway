@@ -3,16 +3,14 @@ package com.pjmike.http;
 
 import com.pjmike.route.Route;
 import io.netty.handler.codec.http.HttpRequest;
-import org.apache.http.client.methods.HttpUriRequest;
 
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
-import java.util.Objects;
 
-import static com.pjmike.constants.CommonConstants.HTTP;
-import static com.pjmike.constants.CommonConstants.HTTPS;
+import static com.pjmike.common.constants.CommonConstants.HTTP;
+import static com.pjmike.common.constants.CommonConstants.HTTPS;
 
 /**
  * <p>

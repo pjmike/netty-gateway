@@ -4,14 +4,13 @@ import com.alibaba.csp.sentinel.Entry;
 import com.alibaba.csp.sentinel.SphU;
 import com.alibaba.csp.sentinel.context.ContextUtil;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.pjmike.context.ChannelContextUtil;
+import com.pjmike.common.context.ChannelContext;
 import com.pjmike.exception.GatewayException;
 import com.pjmike.filter.*;
 
 import com.pjmike.http.NettyHttpResponseUtil;
 import com.pjmike.route.Route;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.handler.codec.http.FullHttpRequest;
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,7 +45,7 @@ public class FilterWebHandler implements WebHandler {
 
     @Override
     public void handle(Channel channel) throws Exception {
-        Route route = ChannelContextUtil.getRoute(channel);
+        Route route = ChannelContext.getRoute(channel);
         List<GatewayFilter> gatewayFilters = route.getGatewayFilters();
         this.filterProcessor.setFilterLoaderGatewayFilters(gatewayFilters);
         forwardAction(channel);
@@ -73,6 +72,7 @@ public class FilterWebHandler implements WebHandler {
             route(channel);
         } catch (Exception e) {
             // 熔断降级
+            log.info("开启降级模式");
             fallbackHandler(channel);
         } finally {
             if (entry != null) {
@@ -87,13 +87,13 @@ public class FilterWebHandler implements WebHandler {
      *
      * @param channel
      */
-    private void fallbackHandler(Channel channel) {
-        channel.writeAndFlush(NettyHttpResponseUtil.buildFailResponse("proxy request failed"))
-                .addListener(ChannelFutureListener.CLOSE);
+    private void fallbackHandler(Channel channel) throws GatewayException {
+        ChannelContext.setResponse(channel, NettyHttpResponseUtil.buildFailResponse("service degrade"));
+        postAction(channel);
     }
 
     private String getRequestPath(Channel channel) {
-        FullHttpRequest httpRequest = ChannelContextUtil.getRequest(channel);
+        FullHttpRequest httpRequest = ChannelContext.getRequest(channel);
         return URI.create(httpRequest.uri()).getPath();
     }
 
@@ -106,7 +106,7 @@ public class FilterWebHandler implements WebHandler {
     }
 
     private void error(Throwable e, Channel channel) {
-        ChannelContextUtil.setException(channel, e);
+        ChannelContext.setException(channel, e);
         this.filterProcessor.error(channel);
     }
 

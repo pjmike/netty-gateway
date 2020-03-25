@@ -1,6 +1,6 @@
 package com.pjmike.filter.route;
 
-import com.pjmike.context.ChannelContextUtil;
+import com.pjmike.common.context.ChannelContext;
 import com.pjmike.filter.GlobalFilter;
 import com.pjmike.http.NettyClientHttpRequest;
 import com.pjmike.http.NettyClientHttpRequestBuilder;
@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  * <p>
  * 有两种做法进行HTTP请求转发：
- * 1. 使用开源的HTTP网络库进行转发，比如HttpClient、OkHttp、Ribbon、Vert.x等
+ * 1. 使用开源的HTTP网络库进行转发，比如HttpClient、OkHttp、Fegin、Vert.x等
  * 2. 使用Netty自定义Netty客户端
  * </p>
  *
@@ -44,12 +44,12 @@ public class NettyRoutingFilter extends GlobalFilter {
 
     @Override
     public void filter(Channel channel) throws Exception {
-        FullHttpRequest httpRequest = ChannelContextUtil.getRequest(channel);
-        Route route = ChannelContextUtil.getRoute(channel);
+        FullHttpRequest httpRequest = ChannelContext.getRequest(channel);
+        Route route = ChannelContext.getRoute(channel);
 
         NettyClientHttpRequestBuilder requestBuilder = new NettyClientHttpRequestBuilder(httpRequest, route);
         NettyClientHttpRequest nettyClientHttpRequest = requestBuilder.buildHttpRequest();
-        ChannelContextUtil.setNettyHttpRequest(channel, nettyClientHttpRequest);
+        ChannelContext.setNettyHttpRequest(channel, nettyClientHttpRequest);
 
         NettyClient.getInstance().request(nettyClientHttpRequest, channel);
     }

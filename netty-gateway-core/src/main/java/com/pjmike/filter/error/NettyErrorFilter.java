@@ -1,6 +1,6 @@
-package com.pjmike.filter.post;
+package com.pjmike.filter.error;
 
-import com.pjmike.context.ChannelContextUtil;
+import com.pjmike.common.context.ChannelContext;
 import com.pjmike.filter.GlobalFilter;
 import com.pjmike.http.NettyHttpResponseUtil;
 import io.netty.channel.Channel;
@@ -24,7 +24,7 @@ public class NettyErrorFilter extends GlobalFilter {
 
     @Override
     public void filter(Channel channel) throws Exception {
-        Throwable exception = ChannelContextUtil.getException(channel);
+        Throwable exception = ChannelContext.getException(channel);
         if (exception != null) {
             channel.writeAndFlush(NettyHttpResponseUtil.buildFailResponse(exception.getMessage()))
                     .addListener(ChannelFutureListener.CLOSE);

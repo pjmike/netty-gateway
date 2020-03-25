@@ -1,7 +1,7 @@
 package com.pjmike.filter;
 
 
-import com.pjmike.filter.post.NettyErrorFilter;
+import com.pjmike.filter.error.NettyErrorFilter;
 import com.pjmike.filter.post.NettyWriteResponseFilter;
 import com.pjmike.filter.pre.*;
 import com.pjmike.filter.route.NettyRoutingFilter;
@@ -33,7 +33,7 @@ public class FilterRegistry {
         put(PreFilter.class.getName(), new PreFilter());
         put(FlowFilter.class.getName(), new FlowFilter());
         put(AuthTokenFilter.class.getName(), new AuthTokenFilter());
-        put(AntiSpiderFilter.class.getName(), new AntiSpiderFilter());
+//        put(AntiSpiderFilter.class.getName(), new AntiSpiderFilter());
         put(NettyRoutingFilter.class.getName(), new NettyRoutingFilter());
         put(NettyErrorFilter.class.getName(), new NettyErrorFilter());
         put(NettyWriteResponseFilter.class.getName(), new NettyWriteResponseFilter());

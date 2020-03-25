@@ -1,14 +1,10 @@
 package com.pjmike.execute;
 
-import com.pjmike.context.ChannelContextUtil;
-import com.pjmike.exception.GatewayException;
+import com.pjmike.common.context.ChannelContext;
 import com.pjmike.filter.handle.WebHandler;
 import com.pjmike.route.Route;
 import com.pjmike.route.RouteLocator;
 import io.netty.channel.Channel;
-import io.netty.handler.codec.http.HttpResponseStatus;
-
-import java.util.Objects;
 
 /**
  * @description:
@@ -32,7 +28,7 @@ public class GatewayExecutor extends AbstractExecutor<Void> {
         Route route = this.routeLocator.lookupRoute(channel);
 
         //bind channel and route
-        ChannelContextUtil.setRoute(channel,route);
+        ChannelContext.setRoute(channel,route);
         // execute filter
         this.webHandler.handle(channel);
         return null;

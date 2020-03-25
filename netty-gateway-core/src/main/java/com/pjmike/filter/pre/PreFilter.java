@@ -1,6 +1,6 @@
 package com.pjmike.filter.pre;
 
-import com.pjmike.context.ChannelContextUtil;
+import com.pjmike.common.context.ChannelContext;
 import com.pjmike.filter.GlobalFilter;
 import com.pjmike.route.Route;
 import io.netty.channel.Channel;
@@ -24,9 +24,9 @@ public class PreFilter extends GlobalFilter {
 
     @Override
     public void filter(Channel channel) throws Exception {
-        Route route = ChannelContextUtil.getRoute(channel);
+        Route route = ChannelContext.getRoute(channel);
         String protocol = route.getUri().getScheme();
         //set rpc type
-        ChannelContextUtil.setRpcType(channel, protocol);
+        ChannelContext.setRpcType(channel, protocol);
     }
 }

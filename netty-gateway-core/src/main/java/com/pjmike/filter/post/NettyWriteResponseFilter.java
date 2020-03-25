@@ -1,6 +1,6 @@
 package com.pjmike.filter.post;
 
-import com.pjmike.context.ChannelContextUtil;
+import com.pjmike.common.context.ChannelContext;
 import com.pjmike.filter.GlobalFilter;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -32,8 +32,8 @@ public class NettyWriteResponseFilter extends GlobalFilter {
     @Override
     public void filter(Channel channel) {
         log.info("serverChannel id : {} ", channel.id());
-        FullHttpResponse response = ChannelContextUtil.getResponse(channel);
-        Boolean keepAlive = ChannelContextUtil.getKeepAlive(channel);
+        FullHttpResponse response = ChannelContext.getResponse(channel);
+        Boolean keepAlive = ChannelContext.getKeepAlive(channel);
         if (response == null) {
             return;
         }

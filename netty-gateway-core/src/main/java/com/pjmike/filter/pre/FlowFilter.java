@@ -1,6 +1,6 @@
 package com.pjmike.filter.pre;
 
-import com.pjmike.context.ChannelContextUtil;
+import com.pjmike.common.context.ChannelContext;
 import com.pjmike.enums.RpcTypeEnum;
 import com.pjmike.exception.GatewayException;
 import com.pjmike.filter.GlobalFilter;
@@ -32,7 +32,7 @@ public class FlowFilter extends GlobalFilter {
 
     @Override
     public void filter(Channel channel) throws Exception {
-        String rpcType = ChannelContextUtil.getRpcType(channel);
+        String rpcType = ChannelContext.getRpcType(channel);
         try {
             if (StringUtils.isNotBlank(rpcType) && RpcTypeEnum.DUBBO.getName().equals(rpcType)) {
                 DubboExecutor.getInstance().execute(channel);

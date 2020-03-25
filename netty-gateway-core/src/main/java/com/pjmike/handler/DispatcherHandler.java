@@ -1,8 +1,8 @@
 package com.pjmike.handler;
 
 
-import com.pjmike.context.ApplicationContext;
-import com.pjmike.context.ChannelContextUtil;
+import com.pjmike.common.context.ApplicationContext;
+import com.pjmike.common.context.ChannelContext;
 import com.pjmike.http.NettyHttpResponseUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
@@ -36,8 +36,8 @@ public class DispatcherHandler extends SimpleChannelInboundHandler<FullHttpReque
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest httpRequest) throws Exception {
         Channel channel = ctx.channel();
         boolean keepAlive = HttpUtil.isKeepAlive(httpRequest);
-        ChannelContextUtil.setRequest(channel, httpRequest);
-        ChannelContextUtil.setKeepAlive(channel, keepAlive);
+        ChannelContext.setRequest(channel, httpRequest);
+        ChannelContext.setKeepAlive(channel, keepAlive);
         //execute the http proxy request
         ApplicationContext.getInstance().getGatewayExecutor().execute(channel);
     }

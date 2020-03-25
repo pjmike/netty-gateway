@@ -1,6 +1,6 @@
-package com.pjmike.context;
+package com.pjmike.common.context;
 
-import com.pjmike.attribute.Attributes;
+import com.pjmike.common.attribute.Attributes;
 import com.pjmike.http.NettyClientHttpRequest;
 import com.pjmike.route.Route;
 import io.netty.channel.Channel;
@@ -12,7 +12,7 @@ import io.netty.handler.codec.http.FullHttpResponse;
  * @author: pjmike
  * @create: 2019/11/26
  */
-public class ChannelContextUtil {
+public class ChannelContext {
     public static void setRequest(Channel channel, FullHttpRequest request) {
         channel.attr(Attributes.REQUEST).set(request);
     }

@@ -4,12 +4,13 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.util.concurrent.RateLimiter;
-import com.pjmike.context.ChannelContextUtil;
+import com.pjmike.common.context.ChannelContext;
 import com.pjmike.exception.GatewayException;
 import com.pjmike.filter.GlobalFilter;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpResponseStatus;
+import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
@@ -27,6 +28,7 @@ import java.util.concurrent.TimeUnit;
  * @author: pjmike
  * @create: 2020/01/16
  */
+@Slf4j
 public class AntiSpiderFilter extends GlobalFilter {
     private LoadingCache<String, RateLimiter> limiterCache = CacheBuilder.newBuilder()
             .maximumSize(1000)
@@ -36,7 +38,7 @@ public class AntiSpiderFilter extends GlobalFilter {
                 @Override
                 public RateLimiter load(String key) throws Exception {
                     //每个IP每秒限流2个令牌
-                    return RateLimiter.create(2);
+                    return RateLimiter.create(10);
                 }
             });
 
@@ -52,7 +54,7 @@ public class AntiSpiderFilter extends GlobalFilter {
     }
     @Override
     public void filter(Channel channel) throws Exception {
-        FullHttpRequest request = ChannelContextUtil.getRequest(channel);
+        FullHttpRequest request = ChannelContext.getRequest(channel);
         String clientIp = request.headers().get("X-Forwarded-For");
         if (clientIp == null) {
             InetSocketAddress inetSocketAddress = (InetSocketAddress) channel.remoteAddress();
@@ -61,7 +63,8 @@ public class AntiSpiderFilter extends GlobalFilter {
         // limit clientIp
         RateLimiter rateLimiter = limiterCache.get(clientIp);
         if (!rateLimiter.tryAcquire()) {
-            throw new GatewayException(HttpResponseStatus.INTERNAL_SERVER_ERROR,"同一IP访问次数1s内不能超过2次");
+            log.warn("同一个IP在1s内访问次数不能超过10次");
+            throw new GatewayException(HttpResponseStatus.INTERNAL_SERVER_ERROR,"同一个IP在1s内访问次数不能超过10次");
         }
     }
 }

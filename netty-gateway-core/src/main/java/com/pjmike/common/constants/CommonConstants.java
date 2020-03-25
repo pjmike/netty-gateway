@@ -1,4 +1,4 @@
-package com.pjmike.constants;
+package com.pjmike.common.constants;
 
 /**
  * @description: 公共常量

@@ -1,7 +1,7 @@
 package com.pjmike.netty.client.handler;
 
-import com.pjmike.attribute.Attributes;
-import com.pjmike.context.ChannelContextUtil;
+import com.pjmike.common.attribute.Attributes;
+import com.pjmike.common.context.ChannelContext;
 import com.pjmike.filter.handle.FilterWebHandler;
 import com.pjmike.http.NettyHttpResponseUtil;
 import io.netty.channel.Channel;
@@ -40,7 +40,7 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<FullHttpResp
         Channel serverChannel = clientChannel.attr(Attributes.SERVER_CHANNEL).get();
         FullHttpResponse response = NettyHttpResponseUtil.buildSuccessResponse(msg);
 
-        ChannelContextUtil.setResponse(serverChannel, response);
+        ChannelContext.setResponse(serverChannel, response);
         //write response
         FilterWebHandler.getInstance().postAction(serverChannel);
 
@@ -64,6 +64,6 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<FullHttpResp
 
     private void setResponse(Channel channel, FullHttpResponse response) {
         Channel serverChannel = channel.attr(Attributes.SERVER_CHANNEL).get();
-        ChannelContextUtil.setResponse(serverChannel, response);
+        ChannelContext.setResponse(serverChannel, response);
     }
 }

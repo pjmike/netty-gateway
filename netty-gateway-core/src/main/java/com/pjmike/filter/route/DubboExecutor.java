@@ -2,7 +2,7 @@ package com.pjmike.filter.route;
 
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.pjmike.context.ChannelContextUtil;
+import com.pjmike.common.context.ChannelContext;
 import com.pjmike.http.NettyHttpResponseUtil;
 import com.pjmike.utils.DubboGenericUtil;
 import io.netty.channel.Channel;
@@ -44,7 +44,7 @@ public class DubboExecutor {
 
     private String getInterfaceClass(Channel channel) {
         // demo test
-        URI routeUri = ChannelContextUtil.getRoute(channel).getUri();
+        URI routeUri = ChannelContext.getRoute(channel).getUri();
         String url = routeUri.toASCIIString();
         return url.substring(24);
     }

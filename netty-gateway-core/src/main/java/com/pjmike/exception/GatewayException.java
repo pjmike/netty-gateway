@@ -3,7 +3,7 @@ package com.pjmike.exception;
 import io.netty.handler.codec.http.HttpResponseStatus;
 
 /**
- * All Handled exceptions in gateway are GatewayException，it's unchecked
+ * All Handled exceptions in gateway are GatewayException，it's unchecked,need try catch
  * @author: pjmike
  * @create: 2020/02/24
  */

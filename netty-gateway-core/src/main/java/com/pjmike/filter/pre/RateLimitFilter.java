@@ -1,7 +1,7 @@
 package com.pjmike.filter.pre;
 
 import com.google.common.util.concurrent.RateLimiter;
-import com.pjmike.constants.CommonConstants;
+import com.pjmike.common.constants.CommonConstants;
 import com.pjmike.filter.GlobalFilter;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ public class RateLimitFilter extends GlobalFilter {
     @Override
     public void filter(Channel channel) throws Exception {
         double acquire = rateLimiter.acquire();
-        log.info("time spent sleeping to enforce rate : {}", acquire);
+        log.info("获取一个令牌需要阻塞等待的时间：{}{}", acquire,"s");
     }
 
     @Override
