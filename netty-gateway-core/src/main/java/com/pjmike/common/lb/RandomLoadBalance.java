@@ -1,5 +1,6 @@
 package com.pjmike.common.lb;
 
+import java.net.URI;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -10,14 +11,10 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class RandomLoadBalance implements LoadBalance {
     public static final String NAME = "random";
-    private final List<String> urls;
-    public RandomLoadBalance(List<String> urls) {
-        this.urls = urls;
-    }
 
     @Override
-    public String choose(String url) {
+    public String choose(List<String> targets, URI uri) {
         //TODO
-        return urls.get(ThreadLocalRandom.current().nextInt(urls.size()));
+        return targets.get(ThreadLocalRandom.current().nextInt(targets.size()));
     }
 }

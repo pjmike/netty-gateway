@@ -1,3 +1,0 @@
-<aspects>
-    <aspect name="com.alibaba.csp.sentinel.annotation.aspectj.SentinelResourceAspect"/>
-</aspects>
