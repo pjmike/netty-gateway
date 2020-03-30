@@ -1,4 +1,4 @@
-package com.pjmike.common.constants;
+package com.pjmike.commons.constants;
 
 /**
  * 线程池常量参数

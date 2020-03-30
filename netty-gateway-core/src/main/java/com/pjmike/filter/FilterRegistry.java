@@ -1,7 +1,7 @@
 package com.pjmike.filter;
 
 
-import com.pjmike.common.lb.LoadBalanceFactory;
+import com.pjmike.commons.lb.LoadBalanceFactory;
 import com.pjmike.filter.error.NettyErrorFilter;
 import com.pjmike.filter.post.NettyWriteResponseFilter;
 import com.pjmike.filter.pre.*;

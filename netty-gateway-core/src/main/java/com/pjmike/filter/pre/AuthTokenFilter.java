@@ -1,7 +1,7 @@
 package com.pjmike.filter.pre;
 
-import com.pjmike.common.context.ApplicationContext;
-import com.pjmike.common.context.ChannelContext;
+import com.pjmike.commons.context.ApplicationContext;
+import com.pjmike.commons.context.ChannelContext;
 import com.pjmike.exception.GatewayException;
 import com.pjmike.filter.GlobalFilter;
 import io.netty.channel.Channel;

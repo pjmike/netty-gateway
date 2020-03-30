@@ -1,6 +1,6 @@
 package com.pjmike.filter.error;
 
-import com.pjmike.common.context.ChannelContext;
+import com.pjmike.commons.context.ChannelContext;
 import com.pjmike.filter.GlobalFilter;
 import com.pjmike.http.NettyHttpResponseUtil;
 import io.netty.channel.Channel;

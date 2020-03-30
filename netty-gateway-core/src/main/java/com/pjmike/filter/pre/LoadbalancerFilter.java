@@ -1,9 +1,9 @@
 package com.pjmike.filter.pre;
 
-import com.pjmike.common.constants.CommonConstants;
-import com.pjmike.common.context.ChannelContext;
+import com.pjmike.commons.constants.CommonConstants;
+import com.pjmike.commons.context.ChannelContext;
 import com.pjmike.filter.GlobalFilter;
-import com.pjmike.common.lb.LoadBalance;
+import com.pjmike.commons.lb.LoadBalance;
 import com.pjmike.route.Route;
 import com.pjmike.utils.PropertiesUtil;
 import io.netty.channel.Channel;

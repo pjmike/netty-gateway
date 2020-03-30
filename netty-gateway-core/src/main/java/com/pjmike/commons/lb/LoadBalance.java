@@ -1,4 +1,4 @@
-package com.pjmike.common.lb;
+package com.pjmike.commons.lb;
 
 import org.apache.dubbo.common.extension.SPI;
 

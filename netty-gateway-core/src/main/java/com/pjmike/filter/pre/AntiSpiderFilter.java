@@ -4,7 +4,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.util.concurrent.RateLimiter;
-import com.pjmike.common.context.ChannelContext;
+import com.pjmike.commons.context.ChannelContext;
 import com.pjmike.exception.GatewayException;
 import com.pjmike.filter.GlobalFilter;
 import io.netty.channel.Channel;

@@ -1,6 +1,6 @@
 package com.pjmike.handler.predicate;
 
-import com.pjmike.common.attribute.Attributes;
+import com.pjmike.commons.attribute.Attributes;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;

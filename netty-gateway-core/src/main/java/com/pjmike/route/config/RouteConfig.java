@@ -1,6 +1,6 @@
 package com.pjmike.route.config;
 
-import com.pjmike.annotation.Bean;
+import com.pjmike.commons.annotation.Bean;
 import com.pjmike.handler.predicate.PredicateUtils;
 import com.pjmike.route.Route;
 

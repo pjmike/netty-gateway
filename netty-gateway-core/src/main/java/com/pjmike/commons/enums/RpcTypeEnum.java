@@ -1,9 +1,8 @@
-package com.pjmike.enums;
+package com.pjmike.commons.enums;
 
 import com.pjmike.exception.GatewayException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 import java.util.Arrays;
 import java.util.List;

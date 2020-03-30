@@ -1,8 +1,8 @@
 package com.pjmike.handler;
 
 
-import com.pjmike.common.context.ApplicationContext;
-import com.pjmike.common.context.ChannelContext;
+import com.pjmike.commons.context.ApplicationContext;
+import com.pjmike.commons.context.ChannelContext;
 import com.pjmike.http.NettyHttpResponseUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;

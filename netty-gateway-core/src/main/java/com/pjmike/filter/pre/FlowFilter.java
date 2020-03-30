@@ -1,7 +1,7 @@
 package com.pjmike.filter.pre;
 
-import com.pjmike.common.context.ChannelContext;
-import com.pjmike.enums.RpcTypeEnum;
+import com.pjmike.commons.context.ChannelContext;
+import com.pjmike.commons.enums.RpcTypeEnum;
 import com.pjmike.exception.GatewayException;
 import com.pjmike.filter.GlobalFilter;
 import com.pjmike.filter.handle.FilterWebHandler;

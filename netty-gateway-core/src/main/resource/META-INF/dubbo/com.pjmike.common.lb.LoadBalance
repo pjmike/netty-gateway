@@ -1,1 +1,1 @@
-random = com.pjmike.common.lb.RandomLoadBalance
+random = com.pjmike.commons.lb.RandomLoadBalance

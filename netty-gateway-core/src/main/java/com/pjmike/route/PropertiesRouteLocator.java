@@ -1,6 +1,6 @@
 package com.pjmike.route;
 
-import com.pjmike.common.constants.CommonConstants;
+import com.pjmike.commons.constants.CommonConstants;
 import com.pjmike.handler.predicate.PredicateUtils;
 import com.pjmike.utils.PropertiesUtil;
 import io.netty.channel.Channel;

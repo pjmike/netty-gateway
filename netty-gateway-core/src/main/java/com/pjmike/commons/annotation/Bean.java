@@ -1,4 +1,4 @@
-package com.pjmike.annotation;
+package com.pjmike.commons.annotation;
 
 import java.lang.annotation.*;
 

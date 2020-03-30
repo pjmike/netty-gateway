@@ -1,11 +1,7 @@
-package com.pjmike.common.lb;
+package com.pjmike.commons.lb;
 
-import cn.hutool.core.util.ClassLoaderUtil;
-import com.pjmike.common.lb.LoadBalance;
 import org.apache.commons.lang.StringUtils;
 import org.apache.dubbo.common.extension.ExtensionLoader;
-
-import java.util.ServiceLoader;
 
 /**
  * @description: 工厂类

@@ -1,7 +1,7 @@
 package com.pjmike.utils;
 
 
-import com.pjmike.common.constants.CommonConstants;
+import com.pjmike.commons.constants.CommonConstants;
 import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ReferenceConfig;
 import org.apache.dubbo.config.RegistryConfig;

@@ -1,7 +1,7 @@
 package com.pjmike.route;
 
 import cn.hutool.core.util.ClassLoaderUtil;
-import com.pjmike.annotation.Bean;
+import com.pjmike.commons.annotation.Bean;
 import com.pjmike.route.config.RouteConfig;
 import lombok.extern.slf4j.Slf4j;
 

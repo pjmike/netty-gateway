@@ -1,4 +1,4 @@
-package com.pjmike.common.lb;
+package com.pjmike.commons.lb;
 
 import java.net.URI;
 import java.util.List;

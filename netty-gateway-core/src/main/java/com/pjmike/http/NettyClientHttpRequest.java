@@ -9,8 +9,8 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
-import static com.pjmike.common.constants.CommonConstants.HTTP;
-import static com.pjmike.common.constants.CommonConstants.HTTPS;
+import static com.pjmike.commons.constants.CommonConstants.HTTP;
+import static com.pjmike.commons.constants.CommonConstants.HTTPS;
 
 /**
  * <p>

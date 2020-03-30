@@ -1,7 +1,7 @@
 package com.pjmike.filter.pre;
 
 import com.google.common.util.concurrent.RateLimiter;
-import com.pjmike.common.constants.CommonConstants;
+import com.pjmike.commons.constants.CommonConstants;
 import com.pjmike.filter.GlobalFilter;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
