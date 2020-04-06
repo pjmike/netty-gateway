@@ -1,6 +1,6 @@
-package com.pjmike.gateway.service;
+package com.pjmike.dubbo.service;
 
-import com.pjmike.gateway.api.DemoService;
+import com.pjmike.dubbo.api.DemoService;
 import org.apache.dubbo.config.annotation.Service;
 
 /**

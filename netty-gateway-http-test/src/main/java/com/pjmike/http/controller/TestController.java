@@ -1,4 +1,4 @@
-package com.pjmike.gateway.controller;
+package com.pjmike.http.controller;
 
 
 import org.springframework.web.bind.annotation.*;
@@ -32,12 +32,13 @@ public class TestController {
     }
 
     @PostMapping("/login")
-    public Map<String, String> login(@RequestBody Map<String, String> params) throws InterruptedException {
+    public Map<String, Object> login(@RequestBody Map<String, String> params) throws InterruptedException {
         String name = params.get("name");
         String age = params.get("age");
-        Map<String, String> map = new HashMap<>();
-        map.put("name", name);
-        map.put("age", age);
+        System.out.println("name : " + name + ", age: " + age);
+        Map<String, Object> map = new HashMap<>();
+        map.put("result", "ok");
+        map.put("code",200);
         return map;
     }
 }

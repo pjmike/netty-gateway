@@ -44,7 +44,7 @@ public class ApplicationContext {
     public CompositeRouteLocator initRouteLocator() {
         List<RouteLocator> routeLocators = new ArrayList<>();
         routeLocators.add(new PropertiesRouteLocator());
-        routeLocators.add(new DiscoveryClientRouteLocator(DiscoverClientFactory.getDiscoverClient("")));
+//        routeLocators.add(new DiscoveryClientRouteLocator(DiscoverClientFactory.getDiscoverClient("")));
         routeLocators.add(new AnnotationRouteLocator());
         CompositeRouteLocator compositeRouteLocator = new CompositeRouteLocator(routeLocators);
         return compositeRouteLocator;

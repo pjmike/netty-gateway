@@ -1,4 +1,4 @@
-package com.pjmike.gateway.api;
+package com.pjmike.dubbo.api;
 
 /**
  * @description:
