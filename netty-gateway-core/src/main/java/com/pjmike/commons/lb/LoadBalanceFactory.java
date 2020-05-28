@@ -10,8 +10,8 @@ import org.apache.dubbo.common.extension.ExtensionLoader;
  * @create: 2020/03/26
  */
 public class LoadBalanceFactory {
-    public static LoadBalance getLoadBalance(String name) {
-        ExtensionLoader<LoadBalance> extensionLoader = ExtensionLoader.getExtensionLoader(LoadBalance.class);
+    public static ILoadBalance getLoadBalance(String name) {
+        ExtensionLoader<ILoadBalance> extensionLoader = ExtensionLoader.getExtensionLoader(ILoadBalance.class);
         if (StringUtils.isEmpty(name)) {
             return extensionLoader.getDefaultExtension();
         } else {
@@ -19,8 +19,8 @@ public class LoadBalanceFactory {
         }
     }
 
-    public static LoadBalance getLoadBalance() {
-        ExtensionLoader<LoadBalance> extensionLoader = ExtensionLoader.getExtensionLoader(LoadBalance.class);
+    public static ILoadBalance getLoadBalance() {
+        ExtensionLoader<ILoadBalance> extensionLoader = ExtensionLoader.getExtensionLoader(ILoadBalance.class);
         return extensionLoader.getDefaultExtension();
     }
 }

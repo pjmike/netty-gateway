@@ -10,8 +10,8 @@ import java.util.List;
  * @author: pjmike
  * @create: 2020/03/25
  */
-@SPI(RandomLoadBalance.NAME)
-public interface LoadBalance {
+@SPI(RandomILoadBalance.NAME)
+public interface ILoadBalance {
 
     /**
      * select proxy url

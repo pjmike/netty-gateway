@@ -8,7 +8,8 @@ import com.pjmike.netty.server.NettyServer;
  */
 public class Application {
     public static void main(String[] args) {
-        NettyServer server = new NettyServer(8989);
+        String port = System.getProperty("server.port", "8989");
+        NettyServer server = new NettyServer(Integer.parseInt(port));
         try {
             server.start();
         } catch (Throwable throwable) {

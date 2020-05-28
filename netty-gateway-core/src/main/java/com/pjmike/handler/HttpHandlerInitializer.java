@@ -16,7 +16,7 @@ public class HttpHandlerInitializer extends ChannelInitializer<SocketChannel> {
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {
         ChannelPipeline pipeline = ch.pipeline();
-        pipeline.addLast("httpServerCodec", new HttpServerCodec());
+        pipeline.addLast("httpServerCodec", new HttpServerCodec(8192,102400,102400));
         //聚合 HttpMessage 和 HttpContent
         pipeline.addLast("httpObjectAggregator", new HttpObjectAggregator(1024*1024));
         pipeline.addLast("httpServerHandler", new DispatcherHandler());

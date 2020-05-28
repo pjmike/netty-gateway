@@ -6,6 +6,8 @@ import com.pjmike.filter.GlobalFilter;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 /**
  * @description:
  * @author: pjmike
@@ -14,10 +16,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RateLimitFilter extends GlobalFilter {
     private RateLimiter rateLimiter = RateLimiter.create(CommonConstants.PERMIT_SPER_SECOND);
+    private AtomicLong atomicLong = new AtomicLong();
     @Override
     public void filter(Channel channel) throws Exception {
         double acquire = rateLimiter.acquire();
-        log.info("获取一个令牌需要阻塞等待的时间：{}{}", acquire,"s");
+        log.info("第 {} 个请求，获取令牌需要阻塞等待的时间：{}{}", atomicLong.getAndIncrement(),acquire,"s");
     }
 
     @Override

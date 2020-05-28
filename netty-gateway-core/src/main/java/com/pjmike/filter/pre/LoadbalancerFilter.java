@@ -3,7 +3,7 @@ package com.pjmike.filter.pre;
 import com.pjmike.commons.constants.CommonConstants;
 import com.pjmike.commons.context.ChannelContext;
 import com.pjmike.filter.GlobalFilter;
-import com.pjmike.commons.lb.LoadBalance;
+import com.pjmike.commons.lb.ILoadBalance;
 import com.pjmike.route.Route;
 import com.pjmike.utils.PropertiesUtil;
 import io.netty.channel.Channel;
@@ -20,9 +20,9 @@ import java.util.List;
  */
 @Slf4j
 public class LoadbalancerFilter extends GlobalFilter {
-    private final LoadBalance loadBalance;
+    private final ILoadBalance loadBalance;
 
-    public LoadbalancerFilter(LoadBalance loadBalance) {
+    public LoadbalancerFilter(ILoadBalance loadBalance) {
         this.loadBalance = loadBalance;
     }
 
@@ -44,7 +44,7 @@ public class LoadbalancerFilter extends GlobalFilter {
         }
         List<String> targetServer = getTargetServer(route.getUri());
         String targetUrl = loadBalance.choose(targetServer, route.getUri());
-        log.info("target url - {}", targetUrl);
+        log.info("loadbalance choose url - {}", targetUrl);
         route.setUri(URI.create(targetUrl));
     }
 

@@ -35,7 +35,7 @@ public class FilterRegistry {
         put(FlowFilter.class.getName(), new FlowFilter());
         put(LoadbalancerFilter.class.getName(), new LoadbalancerFilter(LoadBalanceFactory.getLoadBalance()));
         put(AuthTokenFilter.class.getName(), new AuthTokenFilter());
-        put(AntiSpiderFilter.class.getName(), new AntiSpiderFilter());
+//        put(AntiSpiderFilter.class.getName(), new AntiSpiderFilter());
         put(NettyRoutingFilter.class.getName(), new NettyRoutingFilter());
         put(NettyErrorFilter.class.getName(), new NettyErrorFilter());
         put(NettyWriteResponseFilter.class.getName(), new NettyWriteResponseFilter());
